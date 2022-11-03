@@ -39,7 +39,7 @@ els <- read_csv("./els_cleaned.csv")
 #######  4 = "Hispanic, no race specified"
 #######  5 = "Hispanic, race specified"
 #######  6 = "More than one race, non-Hispanic"
-####### 7 = "White, non-Hispanic"
+#######  7 = "White, non-Hispanic"
 #######  -4 = "Nonrespondent"
 #######  -8 = "Survey component legitimate skip/NA"
 ##### 3. [BYMOTHED]
@@ -59,15 +59,30 @@ els <- read_csv("./els_cleaned.csv")
 ####### Description: This variable is a scale of student writing ability as reported by the student's base-year English teacher. Higher values represent higher teacher-rated student writing ability. Variable was created through principal factor analysis (weighted by BYSTUWT) and standardized to a mean of 0 and standard deviation of 1. Teacher responses about student writing ability were reverse-coded (so higher values on variables would indicate greater student writing ability), and only students for whom the English teacher provided a full set of responses were assigned a scale value. The coefficient of reliability (alpha) for the scale is 0.95.
 ####### Note: This composite is constructed from English Teacher Questionnaire variables; thus, values of -4 (nonrespondent) and -8 (survey component legitimate skip) refer to missing data from the English Teacher Questionnaire.
 
+```{r requirement checklist}
+#!!! mark O next to the criteria met !!!
+#Is document fully reproducible? (in Seulbi's run)
+#Is document fully reproducible? (in Sabreen's run)
+#Is document fully reproducible? (in Tony's run)
+#Is document fully reproducible? (in Deanna's run)
+#Is document fully reproducible? (in Alex's run)
+#Does it include inline codes? 
+#Do we have two visualizations?
+#Used pivot_longer()
+#used mutate()
+#used select() O
+#used filter ()
+#used pivot_wider()
+#used group_by()
+#used summarize()
+
+```
 
 ### Data Cleaning 
 
 ```{r data cleaning}
 
-# final requirement: pivot_longer(), mutate (), select(), filter (), pivot_wider()
-
-
-#
+# final requirement: pivot_longer(), mutate(), select(), filter(), pivot_wider()
 
 
 
