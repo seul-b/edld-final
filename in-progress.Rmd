@@ -10,7 +10,13 @@ library(dplyr)
 library(readr)
 
 #retrieve data
-els <- read_csv("./els_02_12_byf3pststu_v1_0.csv")
+#els <- read_csv("./els_02_12_byf3pststu_v1_0.csv")
+#select columns 
+#els <- els %>% dplyr::select(STU_ID, BYSEX, BYRACE, BYMOTHED, BYWRTNGA)
+#save the revised (cleaned) data to csv
+#write.csv(els,"./els_cleaned.csv", row.names = FALSE)
+
+els <- read_csv("./els_cleaned.csv")
 
 ```
 
@@ -60,11 +66,6 @@ els <- read_csv("./els_02_12_byf3pststu_v1_0.csv")
 
 # final requirement: pivot_longer(), mutate (), select(), filter (), pivot_wider()
 
-
-#select columns 
-els <- els %>% dplyr::select(STU_ID, BYSEX, BYRACE, BYMOTHED, BYWRTNGA)
-#save the revised (cleaned) data to csv
-write.csv(els,"./els_cleaned.csv", row.names = FALSE)
 
 #
 
