@@ -1,0 +1,71 @@
+---
+title: "in-progress"
+author: "Seulbi Lee"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(readr)
+els <- read_csv("./data/els_02_12_byf3pststu_v1_0.csv")
+
+```
+
+## change RQs and independent and dependent variables 
+### Research Question
+##### Do the hours spent watching TV effect teacher reported student writing ability? Do the hours spent on homework affect the teacher's reported student writing ability? Do these variables correlate with one another? 
+
+### Data
+##### ELS:2002 represents a major longitudinal effort designed to provide trend data about critical transitions experienced by students as they proceed through high school and into postsecondary education or their careers. The 2002 sophomore cohort is being followed, initially at 2-year intervals, to collect policy-relevant data about educational processes and outcomes. These data pertain especially to student learning, predictors of dropping out, and high school correlates of students’ access to and persistence and attainment in postsecondary education, and their entry into the workforce. 
+
+## Research Question 1
+### Independent Variables: 
+##### 1.[
+####### Description: 
+##### 2. [
+####### Description: 
+##### 3. [
+### Dependent Variables: 
+##### [BYWRTNGA] Student writing ability (teacher-reported)
+####### Description: This variable is a scale of student writing ability as reported by the student's base-year English teacher. Higher values represent higher teacher-rated student writing ability. Variable was created through principal factor analysis (weighted by BYSTUWT) and standardized to a mean of 0 and standard deviation of 1. Teacher responses about student writing ability were reverse-coded (so higher values on variables would indicate greater student writing ability), and only students for whom the English teacher provided a full set of responses were assigned a scale value. The coefficient of reliability (alpha) for the scale is 0.95.
+####### Note: This composite is constructed from English Teacher Questionnaire variables; thus, values of -4 (nonrespondent) and -8 (survey component legitimate skip) refer to missing data from the English Teacher Questionnaire.
+
+
+### Data Clearning 
+
+```{r data cleaning}
+
+# final requirement: pivot_longer(), mutate (), select(), filter (), pivot_wider()
+
+
+# BYWRTNGA code:
+
+
+
+# 1. subset columns 
+els <- els |> 
+  select (STU_ID, )
+
+# 2. 
+
+
+## Question to discuss: catetorical variable? (need to use pivot_wider/pivot_longer) 
+
+
+```
+
+
+```{r visualization 1}
+
+```
+
+
+```{r visualization 2}
+
+```
+
+
+```{r descriptive}
+
+```
