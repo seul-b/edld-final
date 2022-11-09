@@ -84,6 +84,36 @@ els <- read_csv("./els_cleaned.csv")
 
 # final requirement: pivot_longer(), mutate(), select(), filter(), pivot_wider()
 
+els <- els %>%
+  mutate(BYSEX = recode(BYSEX, 
+                        `1` = "Male", 
+                        `2` = "Female",
+                        `-4` = "Nonrespondent",
+                        `-8` = "Sex Survey Skipped"))
+els <- els %>%
+  mutate(BYRACE = recode(BYRACE, 
+                          `1` = "Native American/Alaskan", 
+                          `2` = "Asian", 
+                          `3` = "Black", 
+                          `4`= "Hispanic(no race specified)", 
+                          `5` = "Hispanic(specified)", 
+                          `6` = "More than one race, non-Hispanic", 
+                          `7` = "White, non-Hispanic", 
+                          `-4` = "Nonrespondent", 
+                          `-8` = "Race Survey skipped")) 
+els <- els %>%
+  mutate(BYMOTHED = recode(BYMOTHED,
+                    `1` = "Did not finish high school",
+                    `2` = "Graduated from high school or GED",
+                    `3` = "Attended 2-year school, no degree",
+                    `4` = "Graduated from 2-year school",
+                    `5` = "Attended college, no 4-year degree",
+                    `6` = "Graduated from college",
+                    `7` = "Completed Master's degree or equivalent",
+                    `8` = "Completed PhD, MD, other advanced degree", 
+                    `-4` = "Nonrespondent",
+                    `-8` = "Survey Skipped",
+                    `-9` = "Missing"))
 
 
 ```
