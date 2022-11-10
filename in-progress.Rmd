@@ -89,9 +89,8 @@ els <- els %>%
                         `1` = "Male", 
                         `2` = "Female",
                         `-4` = "Nonrespondent",
-                        `-8` = "Sex Survey Skipped"))
-els <- els %>%
-  mutate(BYRACE = recode(BYRACE, 
+                        `-8` = "Sex Survey Skipped"),
+         BYRACE = recode(BYRACE, 
                           `1` = "Native American/Alaskan", 
                           `2` = "Asian", 
                           `3` = "Black", 
@@ -100,9 +99,8 @@ els <- els %>%
                           `6` = "More than one race, non-Hispanic", 
                           `7` = "White, non-Hispanic", 
                           `-4` = "Nonrespondent", 
-                          `-8` = "Race Survey skipped")) 
-els <- els %>%
-  mutate(BYMOTHED = recode(BYMOTHED,
+                          `-8` = "Race Survey skipped"),
+         BYMOTHED = recode(BYMOTHED,
                     `1` = "Did not finish high school",
                     `2` = "Graduated from high school or GED",
                     `3` = "Attended 2-year school, no degree",
