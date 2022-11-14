@@ -8,15 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 library(dplyr)
 library(readr)
-
-#retrieve data
-#els <- read_csv("./els_02_12_byf3pststu_v1_0.csv")
-#select columns 
-#els <- els %>% dplyr::select(STU_ID, BYSEX, BYRACE, BYMOTHED, BYWRTNGA)
-#save the revised (cleaned) data to csv
-#write.csv(els,"./els_cleaned.csv", row.names = FALSE)
-
-els <- read_csv("./els_cleaned.csv")
+library(tidyr)
 
 ```
 
@@ -57,21 +49,22 @@ els <- read_csv("./els_cleaned.csv")
 ### Dependent Variables: 
 ##### [BYWRTNGA] Student writing ability (teacher-reported)
 ####### Description: This variable is a scale of student writing ability as reported by the student's base-year English teacher. Higher values represent higher teacher-rated student writing ability. Variable was created through principal factor analysis (weighted by BYSTUWT) and standardized to a mean of 0 and standard deviation of 1. Teacher responses about student writing ability were reverse-coded (so higher values on variables would indicate greater student writing ability), and only students for whom the English teacher provided a full set of responses were assigned a scale value. The coefficient of reliability (alpha) for the scale is 0.95.
-####### Note: This composite is constructed from English Teacher Questionnaire variables; thus, values of -4 (nonrespondent) and -8 (survey component legitimate skip) refer to missing data from the English Teacher Questionnaire.
+####### Note: This composite is constructed from English Teacher Questionnaire variables; thus, values of -4 (nonrespondent) and -8 (survey component legitimate skip) refer to missing data from the English Teacher Questionnaire. if BYWRTNGA_ in(-4,-8) then BYWRTNGA = BYWRTNGA_;
+ if BYWRTNGA = . then BYWRTNGA = -9 
 
 ```{r requirement checklist}
 #!!! mark O next to the criteria met !!!
 #Is document fully reproducible? (in Seulbi's run)
-#Is document fully reproducible? (in Sabreen's run)
+#Is document fully reproducible? (in Sabreen's run) o
 #Is document fully reproducible? (in Tony's run)
 #Is document fully reproducible? (in Deanna's run)
 #Is document fully reproducible? (in Alex's run)
 #Does it include inline codes? 
 #Do we have two visualizations?
 #Used pivot_longer()
-#used mutate()
-#used select() O
-#used filter ()
+#used mutate() o
+#used select() o
+#used filter () o
 #used pivot_wider()
 #used group_by()
 #used summarize()
@@ -84,22 +77,43 @@ els <- read_csv("./els_cleaned.csv")
 
 # final requirement: pivot_longer(), mutate(), select(), filter(), pivot_wider()
 
+#retrieve data
+els <- read_csv("./data/els_02_12_byf3pststu_v1_0.csv")
+#select columns 
+els <- els %>% dplyr::select(STU_ID, BYSEX, BYRACE, BYMOTHED, BYWRTNGA)
+#save the revised (cleaned) data to csv
+write.csv(els,"./data/els_cleaned.csv", row.names = FALSE)
+
+els <- read_csv("./data/els_cleaned.csv")
+
+
+
+els$BYSEX <- na_if(els$BYSEX, -4)
+els$BYSEX <- na_if(els$BYSEX, -8)
+els$BYRACE <- na_if(els$BYRACE, -4)
+els$BYRACE <- na_if(els$BYRACE, -8)
+els$BYMOTHED <- na_if(els$BYMOTHED, -4)
+els$BYMOTHED <- na_if(els$BYMOTHED, -8)
+els$BYMOTHED <- na_if(els$BYMOTHED, -9)
+els$BYWRTNGA <- na_if(els$BYWRTNGA, -4)
+els$BYWRTNGA <- na_if(els$BYWRTNGA, -8)
+els$BYWRTNGA <- na_if(els$BYWRTNGA, -9)
+
+els <- els %>% 
+  filter(!is.na(BYWRTNGA))
+
 els <- els %>%
   mutate(BYSEX = recode(BYSEX, 
                         `1` = "Male", 
-                        `2` = "Female",
-                        `-4` = "Nonrespondent",
-                        `-8` = "Sex Survey Skipped"),
+                        `2` = "Female"),
          BYRACE = recode(BYRACE, 
                           `1` = "Native American/Alaskan", 
                           `2` = "Asian", 
                           `3` = "Black", 
-                          `4`= "Hispanic(no race specified)", 
-                          `5` = "Hispanic(specified)", 
+                          `4` = "Hispanic (no race specified)", 
+                          `5` = "Hispanic (specified)", 
                           `6` = "More than one race, non-Hispanic", 
-                          `7` = "White, non-Hispanic", 
-                          `-4` = "Nonrespondent", 
-                          `-8` = "Race Survey skipped"),
+                          `7` = "White, non-Hispanic"),
          BYMOTHED = recode(BYMOTHED,
                     `1` = "Did not finish high school",
                     `2` = "Graduated from high school or GED",
@@ -108,10 +122,28 @@ els <- els %>%
                     `5` = "Attended college, no 4-year degree",
                     `6` = "Graduated from college",
                     `7` = "Completed Master's degree or equivalent",
-                    `8` = "Completed PhD, MD, other advanced degree", 
-                    `-4` = "Nonrespondent",
-                    `-8` = "Survey Skipped",
-                    `-9` = "Missing"))
+                    `8` = "Completed PhD, MD, other advanced degree"))
+
+as.factor(els$BYSEX)
+as.factor(els$BYRACE)
+as.factor(els$BYMOTHED)
+
+#if needed
+els <- els %>%
+  mutate(BYMOTHED_ = case_when(BYMOTHED == "Did not finish high school" ~ "No high school diploma",
+                          BYMOTHED == "Graduated from high school or GED" | 
+                          BYMOTHED == "Attended 2-year school, no degree" ~ "High school diploma",
+                          BYMOTHED == "Graduated from 2-year school" | 
+                          BYMOTHED == "Attended college, no 4-year degree" |  
+                          BYMOTHED == "Graduated from college" ~ "Associate's or Bachelor's degree",
+                          BYMOTHED == "Completed Master's degree or equivalent" |
+                          BYMOTHED == "Completed PhD, MD, other advanced degree" ~ "Postbaccalaureate degree"))
+
+els %>% 
+  pivot_wider(
+    names_from = BYSEX,
+    values_from = c(BYWRTNGA)
+  )
 
 
 ```
