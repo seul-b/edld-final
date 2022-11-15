@@ -12,10 +12,7 @@ library(tidyr)
 ```
 
 ### Research Question
-##### Do the teacher's reported student writing ability correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?
-
-### Data [need to be rephrased]
-##### ELS:2002 represents a major longitudinal effort designed to provide trend data about critical transitions experienced by students as they proceed through high school and into postsecondary education or their careers. The 2002 sophomore cohort is being followed, initially at 2-year intervals, to collect policy-relevant data about educational processes and outcomes. These data pertain especially to student learning, predictors of dropping out, and high school correlates of students’ access to and persistence and attainment in postsecondary education, and their entry into the workforce. 
+##### Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?
 
 ### Independent Variables: 
 ##### 1.[BYSEX]
@@ -46,14 +43,16 @@ library(tidyr)
 #######  -8 = "Survey component legitimate skip/NA"
 #######  -9 = "Missing"
 
-## need to revise
 ### Dependent Variables: 
-##### [BYWRTNGA] Student writing ability (teacher-reported)
-####### Description: This variable is a scale of student writing ability as reported by the student's base-year English teacher. Higher values represent higher teacher-rated student writing ability. Variable was created through principal factor analysis (weighted by BYSTUWT) and standardized to a mean of 0 and standard deviation of 1. Teacher responses about student writing ability were reverse-coded (so higher values on variables would indicate greater student writing ability), and only students for whom the English teacher provided a full set of responses were assigned a scale value. The coefficient of reliability (alpha) for the scale is 0.95.
-####### Note: This composite is constructed from English Teacher Questionnaire variables; thus, values of -4 (nonrespondent) and -8 (survey component legitimate skip) refer to missing data from the English Teacher Questionnaire. if BYWRTNGA_ in(-4,-8) then BYWRTNGA = BYWRTNGA_;
- if BYWRTNGA = . then BYWRTNGA = -9 
+##### 1. [BYTXMSTD] Math test standardized score 
+####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of
+achievement relative to the population (spring 2002 10th-graders) as a whole. It provides information on status compared to peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular
+criterion set of test items). The standardized T score is a transformation of the IRT theta (ability) estimate, rescaled to a mean of 50 and standard deviation of 10.
+##### 2. [F1TXMSTD] F1 math test standardized score 
+####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for
+all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
 
-```{r requirement checklist}
+```{r requirement checklist to be deleted}
 #!!! mark O next to the criteria met !!!
 #Is document fully reproducible? (in Seulbi's run) o
 #Is document fully reproducible? (in Sabreen's run) 
