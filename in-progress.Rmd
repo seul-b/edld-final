@@ -163,5 +163,44 @@ els_wider_f1 <- els %>%
 
 
 ```{r descriptive}
+library(knitr)
+library(needs)
+needs(kableExtra)
 
+By_Race <- els_longer %>%
+  group_by(BYRACE) %>%
+  summarize(race_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+           sd_math = sd(MATH, na.rm = TRUE))
+
+By_Race %>%
+  kbl(caption = "Descriptives by Race") %>%
+  kable_classic()
+
+By_MotherED <- els_longer %>%
+  group_by(BYMOTHED) %>%
+  summarize(mothed_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+            sd_math = sd(MATH, na.rm = TRUE))
+By_MotherED %>%
+  kbl(caption = "Descriptives by Mother's Education Level") %>%
+  kable_classic()
+            
+By_Year <- els_longer %>%
+  group_by(YEAR) %>%
+  summarize(year_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+            sd_math = sd(MATH, na.rm = TRUE))
+By_Year %>%
+  kbl(caption = "Descriptives by Year") %>%
+  kable_classic()
+
+By_Sex <- els_longer %>%
+  group_by(BYSEX) %>%
+  summarize(sex_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+            sd_math = sd(MATH, na.rm = TRUE))
+By_Sex %>%
+  kbl(caption = "Descriptives by Sex") %>%
+  kable_classic()
 ```
