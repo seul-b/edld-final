@@ -165,7 +165,7 @@ els_wider_f1 <- els %>%
 ```{r descriptive}
 library(knitr)
 library(needs)
-needs(kableExtra)
+needs(kableExtra, psych)
 
 By_Race <- els_longer %>%
   group_by(BYRACE) %>%
@@ -173,8 +173,10 @@ By_Race <- els_longer %>%
             mean_math = mean(MATH, na.rm = TRUE), 
            sd_math = sd(MATH, na.rm = TRUE))
 
+describeBy(els_longer$MATH, els_longer$BYRACE)
+
 By_Race %>%
-  kbl(caption = "Descriptives by Race") %>%
+  kbl(caption = "Descriptives by Race", digits = 2) %>%
   kable_classic()
 
 By_MotherED <- els_longer %>%
@@ -182,8 +184,11 @@ By_MotherED <- els_longer %>%
   summarize(mothed_n = n(), 
             mean_math = mean(MATH, na.rm = TRUE), 
             sd_math = sd(MATH, na.rm = TRUE))
+
+describeBy(els_longer$MATH, els_longer$BYMOTHED)
+
 By_MotherED %>%
-  kbl(caption = "Descriptives by Mother's Education Level") %>%
+  kbl(caption = "Descriptives by Mother's Education Level", digits = 2) %>%
   kable_classic()
             
 By_Year <- els_longer %>%
@@ -191,8 +196,12 @@ By_Year <- els_longer %>%
   summarize(year_n = n(), 
             mean_math = mean(MATH, na.rm = TRUE), 
             sd_math = sd(MATH, na.rm = TRUE))
+
+describeBy(els_longer$MATH, els_longer$YEAR)
+
+
 By_Year %>%
-  kbl(caption = "Descriptives by Year") %>%
+  kbl(caption = "Descriptives by Year", digits = 2) %>%
   kable_classic()
 
 By_Sex <- els_longer %>%
@@ -200,7 +209,10 @@ By_Sex <- els_longer %>%
   summarize(sex_n = n(), 
             mean_math = mean(MATH, na.rm = TRUE), 
             sd_math = sd(MATH, na.rm = TRUE))
+
+ describeBy(els_longer$MATH, els_longer$BYSEX)
+
 By_Sex %>%
-  kbl(caption = "Descriptives by Sex") %>%
+  kbl(caption = "Descriptives by Sex", digits = 2) %>%
   kable_classic()
 ```

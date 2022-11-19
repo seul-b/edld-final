@@ -11,7 +11,7 @@
 
 <meta name="author" content="Alex Newson, Deanna Strayer, Sabreen NoorAli, Seulbi Lee, Tony Daza" />
 
-<meta name="date" content="2022-11-18" />
+<meta name="date" content="2022-11-19" />
 
 <title>EDLD 651 Final</title>
 
@@ -583,7 +583,7 @@ display: none;
 <h1 class="title toc-ignore">EDLD 651 Final</h1>
 <h4 class="author">Alex Newson, Deanna Strayer, Sabreen NoorAli, Seulbi
 Lee, Tony Daza</h4>
-<h4 class="date">2022-11-18</h4>
+<h4 class="date">2022-11-19</h4>
 
 </div>
 
@@ -813,7 +813,7 @@ els_wider_f1 &lt;- els %&gt;%
   )</code></pre>
 <pre class="r"><code>library(knitr)
 library(needs)
-needs(kableExtra)
+needs(kableExtra, psych)
 
 By_Race &lt;- els_longer %&gt;%
   group_by(BYRACE) %&gt;%
@@ -821,8 +821,50 @@ By_Race &lt;- els_longer %&gt;%
             mean_math = mean(MATH, na.rm = TRUE), 
            sd_math = sd(MATH, na.rm = TRUE))
 
-By_Race %&gt;%
-  kbl(caption = &quot;Descriptives by Race&quot;) %&gt;%
+describeBy(els_longer$MATH, els_longer$BYRACE)</code></pre>
+<pre><code>## 
+##  Descriptive statistics by group 
+## group: Asian
+##    vars    n  mean    sd median trimmed   mad   min   max range skew kurtosis
+## X1    1 2727 54.04 10.77  54.13   54.17 11.53 19.82 86.68 66.86 -0.1    -0.45
+##      se
+## X1 0.21
+## ------------------------------------------------------------ 
+## group: Black
+##    vars    n  mean   sd median trimmed  mad   min   max range skew kurtosis
+## X1    1 3627 44.34 8.47   44.1   44.19 8.67 19.94 76.32 56.38 0.17    -0.15
+##      se
+## X1 0.14
+## ------------------------------------------------------------ 
+## group: Hispanic (no race specified)
+##    vars    n  mean   sd median trimmed  mad   min   max range skew kurtosis
+## X1    1 1776 45.73 9.14  45.45   45.58 9.67 20.53 76.92 56.39 0.17    -0.26
+##      se
+## X1 0.22
+## ------------------------------------------------------------ 
+## group: Hispanic (specified)
+##    vars    n  mean   sd median trimmed   mad   min   max range skew kurtosis
+## X1    1 2182 45.91 9.94  45.69   45.76 10.33 21.96 75.94 53.98 0.15    -0.36
+##      se
+## X1 0.21
+## ------------------------------------------------------------ 
+## group: More than one race, non-Hispanic
+##    vars    n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## X1    1 1311 50.49 9.68   50.6   50.73 9.71 22.33 80.59 58.26 -0.19    -0.13
+##      se
+## X1 0.27
+## ------------------------------------------------------------ 
+## group: Native American/Alaskan
+##    vars   n  mean   sd median trimmed  mad   min   max range skew kurtosis   se
+## X1    1 234 45.64 8.18  45.48   45.56 8.65 24.07 72.75 48.68 0.16    -0.07 0.53
+## ------------------------------------------------------------ 
+## group: White, non-Hispanic
+##    vars     n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## X1    1 16229 52.92 9.25  53.27   53.17 9.41 19.38 82.63 63.25 -0.24    -0.14
+##      se
+## X1 0.07</code></pre>
+<pre class="r"><code>By_Race %&gt;%
+  kbl(caption = &quot;Descriptives by Race&quot;, digits = 2) %&gt;%
   kable_classic()</code></pre>
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
@@ -853,10 +895,10 @@ Asian
 2920
 </td>
 <td style="text-align:right;">
-54.03706
+54.04
 </td>
 <td style="text-align:right;">
-10.770048
+10.77
 </td>
 </tr>
 <tr>
@@ -867,10 +909,10 @@ Black
 4040
 </td>
 <td style="text-align:right;">
-44.33570
+44.34
 </td>
 <td style="text-align:right;">
-8.474314
+8.47
 </td>
 </tr>
 <tr>
@@ -881,10 +923,10 @@ Hispanic (no race specified)
 1992
 </td>
 <td style="text-align:right;">
-45.73130
+45.73
 </td>
 <td style="text-align:right;">
-9.143261
+9.14
 </td>
 </tr>
 <tr>
@@ -895,10 +937,10 @@ Hispanic (specified)
 2442
 </td>
 <td style="text-align:right;">
-45.90938
+45.91
 </td>
 <td style="text-align:right;">
-9.936289
+9.94
 </td>
 </tr>
 <tr>
@@ -909,10 +951,10 @@ More than one race, non-Hispanic
 1470
 </td>
 <td style="text-align:right;">
-50.49137
+50.49
 </td>
 <td style="text-align:right;">
-9.675826
+9.68
 </td>
 </tr>
 <tr>
@@ -923,10 +965,10 @@ Native American/Alaskan
 260
 </td>
 <td style="text-align:right;">
-45.64415
+45.64
 </td>
 <td style="text-align:right;">
-8.183240
+8.18
 </td>
 </tr>
 <tr>
@@ -937,10 +979,10 @@ White, non-Hispanic
 17364
 </td>
 <td style="text-align:right;">
-52.92453
+52.92
 </td>
 <td style="text-align:right;">
-9.248653
+9.25
 </td>
 </tr>
 <tr>
@@ -951,10 +993,10 @@ NA
 1804
 </td>
 <td style="text-align:right;">
-49.52031
+49.52
 </td>
 <td style="text-align:right;">
-9.483382
+9.48
 </td>
 </tr>
 </tbody>
@@ -964,8 +1006,55 @@ NA
   summarize(mothed_n = n(), 
             mean_math = mean(MATH, na.rm = TRUE), 
             sd_math = sd(MATH, na.rm = TRUE))
-By_MotherED %&gt;%
-  kbl(caption = &quot;Descriptives by Mother&#39;s Education Level&quot;) %&gt;%
+
+describeBy(els_longer$MATH, els_longer$BYMOTHED)</code></pre>
+<pre><code>## 
+##  Descriptive statistics by group 
+## group: Attended 2-year school, no degree
+##    vars    n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## X1    1 3418 49.62 9.36  49.99   49.78 9.64 19.94 76.34  56.4 -0.15     -0.3
+##      se
+## X1 0.16
+## ------------------------------------------------------------ 
+## group: Attended college, no 4-year degree
+##    vars    n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## X1    1 2974 51.52 9.31  51.88   51.74 9.67 23.55 80.59 57.04 -0.19    -0.23
+##      se
+## X1 0.17
+## ------------------------------------------------------------ 
+## group: Completed Master&#39;s degree or equivalent
+##    vars    n  mean  sd median trimmed  mad min   max range  skew kurtosis   se
+## X1    1 2019 56.87 9.4  57.49   57.28 9.44  23 80.21 57.21 -0.46     0.25 0.21
+## ------------------------------------------------------------ 
+## group: Completed PhD, MD, other advanced degree
+##    vars   n  mean    sd median trimmed   mad   min   max range  skew kurtosis
+## X1    1 583 55.64 11.11  56.69   56.24 11.08 22.05 78.65  56.6 -0.48    -0.13
+##      se
+## X1 0.46
+## ------------------------------------------------------------ 
+## group: Did not finish high school
+##    vars    n  mean   sd median trimmed  mad   min   max range skew kurtosis
+## X1    1 3343 44.63 9.39  44.24   44.39 9.56 20.34 80.02 59.68 0.25    -0.17
+##      se
+## X1 0.16
+## ------------------------------------------------------------ 
+## group: Graduated from 2-year school
+##    vars    n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## X1    1 3014 51.08 9.31  51.25   51.23 9.42 21.54 86.68 65.14 -0.13    -0.19
+##      se
+## X1 0.17
+## ------------------------------------------------------------ 
+## group: Graduated from college
+##    vars    n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## X1    1 5327 54.63 9.45  55.22   54.94 9.46 23.37 84.85 61.48 -0.28    -0.13
+##      se
+## X1 0.13
+## ------------------------------------------------------------ 
+## group: Graduated from high school or GED
+##    vars    n  mean   sd median trimmed  mad   min max range skew kurtosis   se
+## X1    1 7460 48.69 9.44  48.74   48.69 9.84 19.38  84 64.62 0.01    -0.28 0.11</code></pre>
+<pre class="r"><code>By_MotherED %&gt;%
+  kbl(caption = &quot;Descriptives by Mother&#39;s Education Level&quot;, digits = 2) %&gt;%
   kable_classic()</code></pre>
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
@@ -996,10 +1085,10 @@ Attended 2-year school, no degree
 3696
 </td>
 <td style="text-align:right;">
-49.61558
+49.62
 </td>
 <td style="text-align:right;">
-9.355354
+9.36
 </td>
 </tr>
 <tr>
@@ -1010,10 +1099,10 @@ Attended college, no 4-year degree
 3178
 </td>
 <td style="text-align:right;">
-51.52284
+51.52
 </td>
 <td style="text-align:right;">
-9.306877
+9.31
 </td>
 </tr>
 <tr>
@@ -1024,10 +1113,10 @@ Completed Master’s degree or equivalent
 2120
 </td>
 <td style="text-align:right;">
-56.87365
+56.87
 </td>
 <td style="text-align:right;">
-9.400804
+9.40
 </td>
 </tr>
 <tr>
@@ -1038,10 +1127,10 @@ Completed PhD, MD, other advanced degree
 622
 </td>
 <td style="text-align:right;">
-55.63943
+55.64
 </td>
 <td style="text-align:right;">
-11.110649
+11.11
 </td>
 </tr>
 <tr>
@@ -1052,10 +1141,10 @@ Did not finish high school
 3862
 </td>
 <td style="text-align:right;">
-44.62849
+44.63
 </td>
 <td style="text-align:right;">
-9.393021
+9.39
 </td>
 </tr>
 <tr>
@@ -1066,10 +1155,10 @@ Graduated from 2-year school
 3240
 </td>
 <td style="text-align:right;">
-51.07686
+51.08
 </td>
 <td style="text-align:right;">
-9.310067
+9.31
 </td>
 </tr>
 <tr>
@@ -1080,10 +1169,10 @@ Graduated from college
 5640
 </td>
 <td style="text-align:right;">
-54.63437
+54.63
 </td>
 <td style="text-align:right;">
-9.453022
+9.45
 </td>
 </tr>
 <tr>
@@ -1094,10 +1183,10 @@ Graduated from high school or GED
 8234
 </td>
 <td style="text-align:right;">
-48.69473
+48.69
 </td>
 <td style="text-align:right;">
-9.436072
+9.44
 </td>
 </tr>
 <tr>
@@ -1108,10 +1197,10 @@ NA
 1700
 </td>
 <td style="text-align:right;">
-49.80597
+49.81
 </td>
 <td style="text-align:right;">
-9.239621
+9.24
 </td>
 </tr>
 </tbody>
@@ -1121,8 +1210,23 @@ NA
   summarize(year_n = n(), 
             mean_math = mean(MATH, na.rm = TRUE), 
             sd_math = sd(MATH, na.rm = TRUE))
-By_Year %&gt;%
-  kbl(caption = &quot;Descriptives by Year&quot;) %&gt;%
+
+describeBy(els_longer$MATH, els_longer$YEAR)</code></pre>
+<pre><code>## 
+##  Descriptive statistics by group 
+## group: Base
+##    vars     n  mean   sd median trimmed   mad   min   max range skew kurtosis
+## X1    1 15892 50.71 9.91  50.83   50.84 10.23 19.38 86.68  67.3 -0.1    -0.19
+##      se
+## X1 0.08
+## ------------------------------------------------------------ 
+## group: Follow-up
+##    vars     n  mean    sd median trimmed   mad   min   max range  skew kurtosis
+## X1    1 13648 50.66 10.11  50.85   50.74 10.85 19.82 79.85 60.03 -0.07    -0.51
+##      se
+## X1 0.09</code></pre>
+<pre class="r"><code>By_Year %&gt;%
+  kbl(caption = &quot;Descriptives by Year&quot;, digits = 2) %&gt;%
   kable_classic()</code></pre>
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
@@ -1153,10 +1257,10 @@ Base
 16146
 </td>
 <td style="text-align:right;">
-50.71016
+50.71
 </td>
 <td style="text-align:right;">
-9.912398
+9.91
 </td>
 </tr>
 <tr>
@@ -1167,10 +1271,10 @@ Follow-up
 16146
 </td>
 <td style="text-align:right;">
-50.66394
+50.66
 </td>
 <td style="text-align:right;">
-10.112263
+10.11
 </td>
 </tr>
 </tbody>
@@ -1180,8 +1284,21 @@ Follow-up
   summarize(sex_n = n(), 
             mean_math = mean(MATH, na.rm = TRUE), 
             sd_math = sd(MATH, na.rm = TRUE))
-By_Sex %&gt;%
-  kbl(caption = &quot;Descriptives by Sex&quot;) %&gt;%
+
+ describeBy(els_longer$MATH, els_longer$BYSEX)</code></pre>
+<pre><code>## 
+##  Descriptive statistics by group 
+## group: Female
+##    vars     n  mean   sd median trimmed  mad   min max range skew kurtosis   se
+## X1    1 14203 50.11 9.64  50.37   50.23 10.2 19.82  84 64.18 -0.1    -0.37 0.08
+## ------------------------------------------------------------ 
+## group: Male
+##    vars     n  mean    sd median trimmed   mad   min   max range skew kurtosis
+## X1    1 13966 51.35 10.41  51.42   51.48 10.85 19.38 86.68  67.3 -0.1    -0.37
+##      se
+## X1 0.09</code></pre>
+<pre class="r"><code>By_Sex %&gt;%
+  kbl(caption = &quot;Descriptives by Sex&quot;, digits = 2) %&gt;%
   kable_classic()</code></pre>
 <table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
@@ -1212,10 +1329,10 @@ Female
 15400
 </td>
 <td style="text-align:right;">
-50.10835
+50.11
 </td>
 <td style="text-align:right;">
-9.640726
+9.64
 </td>
 </tr>
 <tr>
@@ -1226,10 +1343,10 @@ Male
 15254
 </td>
 <td style="text-align:right;">
-51.35109
+51.35
 </td>
 <td style="text-align:right;">
-10.405588
+10.41
 </td>
 </tr>
 <tr>
@@ -1240,10 +1357,10 @@ NA
 1638
 </td>
 <td style="text-align:right;">
-49.95554
+49.96
 </td>
 <td style="text-align:right;">
-9.089882
+9.09
 </td>
 </tr>
 </tbody>
