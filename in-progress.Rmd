@@ -2,7 +2,12 @@
 title: "EDLD 651 Final"
 author: "Alex Newson, Deanna Strayer, Sabreen NoorAli, Seulbi Lee, Tony Daza"
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+
 ---
 
 ```{r setup, include=FALSE}
@@ -11,8 +16,8 @@ library(readr)
 library(tidyr)
 ```
 
-### Research Question
-##### Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?
+# Research Question
+**Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
 
 ### Independent Variables: 
 ##### 1.[BYSEX]
@@ -71,7 +76,7 @@ all F1 in-school responding students (including transfer students), regardless o
 
 ```
 
-### Data Cleaning 
+# Data Cleaning 
 
 ```{r data cleaning}
 
@@ -150,17 +155,193 @@ els_wider_f1 <- els %>%
   )
 
 ```
-
+# Visualization 1
 
 ```{r visualization 1}
 
 ```
 
+# Visualization 2
 
 ```{r visualization 2}
 
 ```
 
+# Visualization 3
+
+## Distribution plots
+These are simple distribution plots by Race, Sex, and Mother's education for year 1 and year 2 for standardized math scores.
+
+```{r visualization 3}
+# Fixed the names to look better.
+els_viz <- els_longer %>%
+  mutate(RACE = recode(BYRACE, "Native American/Alaskan" = "Native American\n /Alaskan",
+                         "Asian" = "Asian", 
+                         "Black" = "Black", 
+                         "Hispanic (no race specified)" = "Hispanic", 
+                         "Hispanic (specified)" = "Hispanic\n (Race specified)", 
+                         "More than one race, non-Hispanic" = "2+ races\n non-Hispanic",
+                         "White, non-Hispanic" = "White\n non-Hispanic"),
+         MOTHED = recode(BYMOTHED, 
+                           "Did not finish high school" = "Did not finish\n high school",
+                           "Graduated from high school or GED" = "Graduated high\n school or GED",
+                           "Attended 2-year school, no degree" = "Attended 2-year school\n no degree",
+                           "Graduated from 2-year school" = "Graduated 2-year\n school",
+                           "Attended college, no 4-year degree" = "Attended college\n no degree",
+                           "Graduated from college" = "Graduated college",
+                           "Completed Master's degree or equivalent" = "Master's degree",
+                           "Completed PhD, MD, other advanced degree" = "PhD, MD,other\nadvanced degree")) %>%
+  mutate(RACE = factor(RACE, levels = c("White\n non-Hispanic",
+                                        "Black",
+                                        "Hispanic",
+                                        "Hispanic\n (Race specified)",
+                                        "Asian",
+                                        "Native American\n /Alaskan",
+                                        "2+ races\n non-Hispanic")),
+         MOTHED = factor(MOTHED, levels = c("Did not finish\n high school",
+                                            "Graduated high\n school or GED",
+                                            "Attended 2-year school\n no degree",
+                                            "Graduated 2-year\n school",
+                                            "Attended college\n no degree",
+                                            "Graduated college",
+                                            "Master's degree",
+                                            "PhD, MD,other\nadvanced degree")))
+
+
+# A plot of the distribution of math scores by race in year 1 and follow up  
+needs(ggplot2)
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE)) %>%
+  ggplot(aes(x = MATH)) +
+  geom_histogram(col='black',fill='white')+
+  theme_minimal() +
+  xlab("Math Scores") +
+  xlim(10,90)+
+  facet_wrap( ~ RACE + YEAR, nrow = 2, ncol=7)+
+  theme(strip.background =element_rect(fill="white"))
+
+# A plot of the distribution of math scores by sex in year 1 and follow up.
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE) & !is.na(BYSEX)) %>%
+  ggplot(aes(x = MATH)) +
+  geom_histogram(col='black',fill='white')+
+  theme_minimal() +
+  xlab("Math Scores") +
+  xlim(10,90)+
+  facet_wrap( ~ BYSEX + YEAR, nrow = 1, ncol=4)+
+  theme(strip.background =element_rect(fill="white"))
+
+# A Plot of distribution of math scores by mother's education for year 1 and follow up. 
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x = MATH)) +
+  geom_histogram(col='black',fill='white')+
+  theme_minimal() +
+  xlab("Math Scores") +
+  xlim(10,90)+
+  facet_wrap( ~ MOTHED + YEAR, nrow = 2, ncol=8)+
+  theme(strip.background =element_rect(fill="white"))
+
+# Honestly I don't love the visualization, so let's look at a box plot of the data.
+
+# How about a density plot?
+```
+
+## Boxplots
+A boxplot of the standardized math scores by Race, Sex, and Mother's education.  
+
+```{r visualization 4}
+# Boxplot of math scores by Race and Sex separated by Year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE)) %>%
+  ggplot(aes(x= RACE, y=MATH)) +
+  geom_boxplot(aes(fill = RACE), show.legend = FALSE)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_viridis_d(option = 'plasma')+
+  theme_minimal()+
+  facet_wrap(~YEAR + BYSEX)+
+  labs(x = "", 
+       y = "Math Scores",
+       title = "Math Score by Race and Year",
+       subtitle = "Separated by sex")
+
+# Boxplot of math scores by Mother's education separated by Year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x= MOTHED, y=MATH)) +
+  geom_boxplot(aes(fill = MOTHED), show.legend = FALSE)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  coord_flip()+
+  scale_fill_viridis_d(option = 'mako')+
+  theme_minimal()+
+  facet_wrap(~YEAR)+
+  labs(x = "", 
+       y = "Math Scores",
+       title = "Math Score by Mother Education and Year")
+
+# Boxplot of math scores by sex separated by year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(BYSEX)) %>%
+  ggplot(aes(x= BYSEX, y=MATH)) +
+  geom_boxplot(aes(fill = BYSEX), show.legend = FALSE)+
+  scale_fill_viridis_d()+
+  theme_minimal()+
+  facet_wrap(~YEAR)+
+  labs(x = "", 
+       y = "Math Scores",
+       title = "Math Score by Sex and Year")
+```
+
+## Density Plots
+
+Finally let's examine the data using density plots.
+```{r visualization 6}
+# Density plot of math scores by Race and Sex.
+needs(ggridges)
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE)) %>%
+  ggplot(aes(x = MATH, y = RACE))+
+  geom_density_ridges(aes(fill = RACE), alpha=0.5)+
+  scale_fill_viridis_d(option = 'plasma')+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  facet_wrap(~BYSEX)
+
+# Denisty plot of math scores by Mother education
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x = MATH, y = MOTHED))+
+  geom_density_ridges(aes(fill = MOTHED), alpha=0.5)+
+  scale_fill_viridis_d()+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  labs(x = "Math Score",
+       y = "Mother's Education Level")
+
+# Density plot of math scores by mother education separated by year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x = MATH, y = MOTHED))+
+  geom_density_ridges(aes(fill = MOTHED), alpha=0.5)+
+  scale_fill_viridis_d()+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  labs(x = "Math Score",
+       y = "Mother's Education Level")+
+  facet_wrap(~YEAR, nrow = 1)
+
+```
+
+# ANOVA Results
+## Math scores by Mother Education and Race
+
+```{r ANOVA}
+needs(car)
+math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
+Anova(math_mod, type = 3)
+```
+
+# Descriptive Statistics
 
 ```{r descriptive}
 library(knitr)
