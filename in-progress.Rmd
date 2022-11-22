@@ -378,6 +378,26 @@ ggwithinstats(data = els_viz, x = YEAR, y = MATH,
 
 ```
 
+## Regression Analysis
+```{r regression}
+# First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
+contrasts(els_viz$RACE)
+# Looks like I set white as the reference earlier.  
+
+mod_race <- lm(MATH ~ 1 + RACE, els_viz)
+summary(mod_race)
+# This just tells us that all groups are significantly different from each other
+# I think we could report pairwise comparisons
+
+race_pairs <- pairwise.t.test(els_viz$MATH, els_viz$RACE, p.adjust.method = "bonf")
+race_pval <- race_pairs$p.value %>%
+  round(digits = 2)
+race_pval
+# Based on this, most groups are significantly different **except** for black/Native, Hispanic/Hispanic (Race specified), Native/Hispanic, Native/Hispanic (Race specified)
+  
+```
+
+
 ## Descriptive Statistics
 
 ```{r descriptive}
