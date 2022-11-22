@@ -7,7 +7,6 @@ output:
     toc: TRUE
     toc_float: TRUE
     code_folding: hide
-
 ---
 
 ```{r setup, include=FALSE}
@@ -15,12 +14,19 @@ library(dplyr)
 library(readr)
 library(tidyr)
 library(ggplot2)
-library(needs)
+library(car)
+library(ggridges)
+library(kableExtra)
+library(psych)
+library(stats)
+library(ggstatsplot)
 ```
 
 # Research Question
 **Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
 
+# Data Information
+## Variables
 ### Independent Variables: 
 ##### 1.[BYSEX]
 #######  1 = "Male"
@@ -59,31 +65,9 @@ criterion set of test items). The standardized T score is a transformation of th
 ####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for
 all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
 
-```{r requirement checklist to be deleted}
-#!!! mark O next to the criteria met !!!
-#Is document fully reproducible? (in Seulbi's run) o
-#Is document fully reproducible? (in Sabreen's run) 
-#Is document fully reproducible? (in Tony's run)
-#Is document fully reproducible? (in Deanna's run)
-#Is document fully reproducible? (in Alex's run)
-#Does it include inline codes? 
-#Do we have two visualizations?
-#Used pivot_longer() o
-#used mutate() o
-#used select() o
-#used filter () o
-#used pivot_wider() o
-#used group_by()
-#used summarize()
-
-```
-
 # Data Cleaning 
 
-```{r data cleaning}
-
-# final requirement: pivot_longer(), mutate(), select(), filter(), pivot_wider()
-
+```{r data cleaning, message=FALSE}
 #retrieve data
 #els <- read_csv("./data/els_02_12_byf3pststu_v1_0.csv")
 #select columns 
@@ -159,7 +143,7 @@ els_wider_f1 <- els %>%
 ```
 # Visualization 1
 
-```{r visualization 1}
+```{r visualization 1, message=FALSE}
 vis1Data <- els_longer %>% 
   mutate(YEAR = factor(YEAR,
                        levels = c("Follow-up",
@@ -180,7 +164,7 @@ vis1Data
 
 # Visualization 2
 
-```{r visualization 2}
+```{r visualization 2, message=FALSE}
 vis2Data <- els_longer %>% 
   mutate(YEAR = factor(YEAR,
                        levels = c("Follow-up",
@@ -228,7 +212,7 @@ vis2DataAlternate
 ## Distribution plots
 These are simple distribution plots by Race, Sex, and Mother's education for year 1 and year 2 for standardized math scores.
 
-```{r visualization 3}
+```{r visualization 3, message=FALSE}
 # Fixed the names to look better.
 els_viz <- els_longer %>%
   mutate(RACE = recode(BYRACE, "Native American/Alaskan" = "Native American\n /Alaskan",
@@ -265,7 +249,6 @@ els_viz <- els_longer %>%
 
 
 # A plot of the distribution of math scores by race in year 1 and follow up  
-needs(ggplot2)
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
   ggplot(aes(x = MATH)) +
@@ -306,7 +289,7 @@ els_viz %>%
 ## Boxplots
 A boxplot of the standardized math scores by Race, Sex, and Mother's education.  
 
-```{r visualization 4}
+```{r visualization 4, message=FALSE}
 # Boxplot of math scores by Race and Sex separated by Year
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
@@ -351,9 +334,8 @@ els_viz %>%
 ## Density Plots
 
 Finally let's examine the data using density plots.
-```{r visualization 6}
+```{r visualization 5, message=FALSE}
 # Density plot of math scores by Race and Sex.
-needs(ggridges)
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
   ggplot(aes(x = MATH, y = RACE))+
@@ -387,6 +369,7 @@ els_viz %>%
   facet_wrap(~BYSEX, nrow = 1)
 
 ```
+# Descriptive Statistics
 
 
 # Stats Stuff
@@ -509,4 +492,47 @@ By_Sex <- els_longer %>%
 By_Sex %>%
   kbl(caption = "Descriptives by Sex", digits = 2) %>%
   kable_classic()
+```
+
+# More Statistics
+## ANOVA Results
+### Math scores by Mother Education and Race
+
+```{r ANOVA, include=FALSE}
+math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
+Anova(math_mod, type = 3)
+```
+
+## Student's T test Analysis
+### Difference in scores between year 1-2
+
+```{r t_test, include=FALSE}
+str(els_viz)
+# Paired student's t test to examine if means from year 1 and year 2 are significantly different
+
+# Created a small data set of just years and scores plus student id
+els_byyear <- els_viz %>%
+  group_by(YEAR)%>%
+  filter(!is.na(MATH) | !is.na(YEAR)) %>%
+  select(STU_ID, YEAR, MATH)%>%
+  pivot_wider(names_from = YEAR,
+              values_from = MATH) %>%
+  rename("Follow" = "Follow-up")
+
+# Paired student's t test to examine if the mean from the follow up is significantly greater than the base year mean
+t.test(els_byyear$Follow, els_byyear$Base, paired = TRUE, alternative = "greater")
+
+# Paired student's t test to examine if means from base year and follow up are significantly different.
+t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE)
+
+# Visualization of the means by year. The t test suggests that there is a significant difference in scores by year, despite the means being similar, unfortunately, the mean of the follow up is significantly less than the base year. I was thinking we could focus on visualizing the data by race and mother's education and sex rather than comparing year 1 to year 2 data.
+#ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
+#              type = "parametric", 
+#              centrally.plotting = TRUE, 
+#              pairwise.display = "s", 
+#              point.path = FALSE,
+#              point.args = aes(size = 0, alpha = 0.2),
+#              results.subtitle = FALSE,
+#              alternative = "greater")
+
 ```
