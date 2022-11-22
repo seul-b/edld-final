@@ -14,6 +14,8 @@ output:
 library(dplyr)
 library(readr)
 library(tidyr)
+library(ggplot2)
+library(needs)
 ```
 
 # Research Question
@@ -158,13 +160,67 @@ els_wider_f1 <- els %>%
 # Visualization 1
 
 ```{r visualization 1}
-
+vis1Data <- els_longer %>% 
+  mutate(YEAR = factor(YEAR,
+                       levels = c("Follow-up",
+                                 "Base"))) %>%
+  filter(!is.na(BYSEX)) %>%
+  ggplot(aes(x=MATH,y=YEAR,fill=YEAR)) +
+    geom_col(position="dodge", show.legend = FALSE) +
+    facet_wrap(~ BYSEX,ncol=1) +
+    labs(x="Math Scores",
+         y="Year",
+         title="Student Math Scores",
+         subtitle="by year and sex"
+         ) +
+    scale_fill_manual(values = c("maroon", "gold")) +
+  theme_light()
+vis1Data
 ```
 
 # Visualization 2
 
 ```{r visualization 2}
+vis2Data <- els_longer %>% 
+  mutate(YEAR = factor(YEAR,
+                       levels = c("Follow-up",
+                                  "Base"))) %>%
+  filter(!is.na(BYRACE)) %>%
+  ggplot(aes(x=MATH,y=YEAR,fill=YEAR)) +
+    geom_col(position="dodge", show.legend = FALSE) +
+    facet_wrap(~ BYRACE,ncol=1) +
+    labs(x="Math Scores",
+         y="Year",
+         title="Student Math Scores",
+         subtitle="by year and race"
+         ) +
+    scale_fill_manual(values = c("maroon", "gold")) +
+  theme_light()
+vis2Data
 
+# Alternate graph combining Visualization 1 & 2? Maybe easier that way?
+
+vis2DataAlternate <- els_longer %>% 
+  mutate(YEAR = factor(YEAR,
+                       levels = c("Follow-up",
+                                  "Base"))) %>%
+  mutate(BYSEX = factor(BYSEX,
+                       levels = c("Male",
+                                  "Female"))) %>%
+  filter(!is.na(BYRACE)) %>%
+  ggplot(aes(x=MATH,y=YEAR,fill=BYSEX)) +
+    geom_col(position="dodge") +
+    facet_wrap(~ BYRACE,ncol=1) +
+    scale_fill_discrete(breaks=c('Male', 'Female')) +
+    labs(x="Math Scores",
+         y="Year",
+         fill = "Sex",
+         title="Student Math Scores",
+         subtitle="by year and race, separated by sex"
+         ) +
+    scale_fill_manual(values = c("maroon", "gold")) +
+  theme_light()
+vis2DataAlternate
 ```
 
 # Visualization 3
@@ -347,7 +403,7 @@ Anova(math_mod, type = 3)
 ### Difference in scores between year 1-2
 
 ```{r t_test}
-needs(stats, ggstatsplot)
+#needs(stats, ggstatsplot)
 str(els_viz)
 # Paired student's t test to examine if means from year 1 and year 2 are significantly different
 
@@ -367,14 +423,14 @@ t.test(els_byyear$Follow, els_byyear$Base, paired = TRUE, alternative = "greater
 t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE)
 
 # Visualization of the means by year. The t test suggests that there is a significant difference in scores by year, despite the means being similar, unfortunately, the mean of the follow up is significantly less than the base year. I was thinking we could focus on visualizing the data by race and mother's education and sex rather than comparing year 1 to year 2 data.
-ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
-              type = "parametric", 
-              centrally.plotting = TRUE, 
-              pairwise.display = "s", 
-              point.path = FALSE,
-              point.args = aes(size = 0, alpha = 0.2),
-              results.subtitle = FALSE,
-              alternative = "greater")
+#ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
+#              type = "parametric", 
+#              centrally.plotting = TRUE, 
+#              pairwise.display = "s", 
+#              point.path = FALSE,
+#              point.args = aes(size = 0, alpha = 0.2),
+#              results.subtitle = FALSE,
+#              alternative = "greater")
 
 ```
 
