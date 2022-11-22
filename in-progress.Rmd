@@ -14,7 +14,6 @@ library(dplyr)
 library(readr)
 library(tidyr)
 library(ggplot2)
-library(car)
 library(ggridges)
 library(kableExtra)
 library(psych)
@@ -58,12 +57,9 @@ library(ggstatsplot)
 
 ### Dependent Variables: 
 ##### 1. [BYTXMSTD] Math test standardized score 
-####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of
-achievement relative to the population (spring 2002 10th-graders) as a whole. It provides information on status compared to peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular
-criterion set of test items). The standardized T score is a transformation of the IRT theta (ability) estimate, rescaled to a mean of 50 and standard deviation of 10.
+####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2002 10th-graders) as a whole. It provides information on status compared to peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). The standardized T score is a transformation of the IRT theta (ability) estimate, rescaled to a mean of 50 and standard deviation of 10.
 ##### 2. [F1TXMSTD] F1 math test standardized score 
-####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for
-all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
+####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
 
 # Data Cleaning 
 
@@ -143,7 +139,7 @@ els_wider_f1 <- els %>%
 ```
 # Visualization 1
 
-```{r visualization 1, message=FALSE}
+```{r visualization 1, message=FALSE, warning=FALSE}
 vis1Data <- els_longer %>% 
   mutate(YEAR = factor(YEAR,
                        levels = c("Follow-up",
@@ -164,7 +160,7 @@ vis1Data
 
 # Visualization 2
 
-```{r visualization 2, message=FALSE}
+```{r visualization 2, message=FALSE, warning=FALSE}
 vis2Data <- els_longer %>% 
   mutate(YEAR = factor(YEAR,
                        levels = c("Follow-up",
@@ -212,7 +208,7 @@ vis2DataAlternate
 ## Distribution plots
 These are simple distribution plots by Race, Sex, and Mother's education for year 1 and year 2 for standardized math scores.
 
-```{r visualization 3, message=FALSE}
+```{r visualization 3, message=FALSE, warning=FALSE}
 # Fixed the names to look better.
 els_viz <- els_longer %>%
   mutate(RACE = recode(BYRACE, "Native American/Alaskan" = "Native American\n /Alaskan",
@@ -289,7 +285,7 @@ els_viz %>%
 ## Boxplots
 A boxplot of the standardized math scores by Race, Sex, and Mother's education.  
 
-```{r visualization 4, message=FALSE}
+```{r visualization 4, message=FALSE, warning=FALSE}
 # Boxplot of math scores by Race and Sex separated by Year
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
@@ -334,7 +330,7 @@ els_viz %>%
 ## Density Plots
 
 Finally let's examine the data using density plots.
-```{r visualization 5, message=FALSE}
+```{r visualization 5, message=FALSE, warning=FALSE}
 # Density plot of math scores by Race and Sex.
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
@@ -369,81 +365,10 @@ els_viz %>%
   facet_wrap(~BYSEX, nrow = 1)
 
 ```
+
 # Descriptive Statistics
 
-
-# Stats Stuff
-## ANOVA Results
-### Math scores by Mother Education and Race
-
-```{r ANOVA}
-needs(car)
-math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
-Anova(math_mod, type = 3)
-```
-
-## Student's T test Analysis
-### Difference in scores between year 1-2
-
-```{r t_test}
-#needs(stats, ggstatsplot)
-str(els_viz)
-# Paired student's t test to examine if means from year 1 and year 2 are significantly different
-
-# Created a small data set of just years and scores plus student id
-els_byyear <- els_viz %>%
-  group_by(YEAR)%>%
-  filter(!is.na(MATH) | !is.na(YEAR)) %>%
-  select(STU_ID, YEAR, MATH)%>%
-  pivot_wider(names_from = YEAR,
-              values_from = MATH) %>%
-  rename("Follow" = "Follow-up")
-
-# Paired student's t test to examine if the mean from the follow up is significantly greater than the base year mean
-t.test(els_byyear$Follow, els_byyear$Base, paired = TRUE, alternative = "greater")
-
-# Paired student's t test to examine if means from base year and follow up are significantly different.
-t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE)
-
-# Visualization of the means by year. The t test suggests that there is a significant difference in scores by year, despite the means being similar, unfortunately, the mean of the follow up is significantly less than the base year. I was thinking we could focus on visualizing the data by race and mother's education and sex rather than comparing year 1 to year 2 data.
-#ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
-#              type = "parametric", 
-#              centrally.plotting = TRUE, 
-#              pairwise.display = "s", 
-#              point.path = FALSE,
-#              point.args = aes(size = 0, alpha = 0.2),
-#              results.subtitle = FALSE,
-#              alternative = "greater")
-
-```
-
-## Regression Analysis
-```{r regression}
-# First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
-contrasts(els_viz$RACE)
-# Looks like I set white as the reference earlier.  
-
-mod_race <- lm(MATH ~ 1 + RACE, els_viz)
-summary(mod_race)
-# This just tells us that all groups are significantly different from each other
-# I think we could report pairwise comparisons
-
-race_pairs <- pairwise.t.test(els_viz$MATH, els_viz$RACE, p.adjust.method = "bonf")
-race_pval <- race_pairs$p.value %>%
-  round(digits = 2)
-race_pval
-# Based on this, most groups are significantly different **except** for black/Native, Hispanic/Hispanic (Race specified), Native/Hispanic, Native/Hispanic (Race specified)
-  
-```
-
-
-## Descriptive Statistics
-
-```{r descriptive}
-library(knitr)
-library(needs)
-needs(kableExtra, psych)
-
+```{r descriptive, message=FALSE}
 By_Race <- els_longer %>%
   group_by(BYRACE) %>%
   summarize(race_n = n(), 
@@ -498,7 +423,8 @@ By_Sex %>%
 ## ANOVA Results
 ### Math scores by Mother Education and Race
 
-```{r ANOVA, include=FALSE}
+```{r ANOVA, warning=FALSE, message=FALSE}
+library(car)
 math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 Anova(math_mod, type = 3)
 ```
@@ -506,8 +432,8 @@ Anova(math_mod, type = 3)
 ## Student's T test Analysis
 ### Difference in scores between year 1-2
 
-```{r t_test, include=FALSE}
-str(els_viz)
+```{r t_test}
+#str(els_viz)
 # Paired student's t test to examine if means from year 1 and year 2 are significantly different
 
 # Created a small data set of just years and scores plus student id
@@ -526,13 +452,31 @@ t.test(els_byyear$Follow, els_byyear$Base, paired = TRUE, alternative = "greater
 t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE)
 
 # Visualization of the means by year. The t test suggests that there is a significant difference in scores by year, despite the means being similar, unfortunately, the mean of the follow up is significantly less than the base year. I was thinking we could focus on visualizing the data by race and mother's education and sex rather than comparing year 1 to year 2 data.
-#ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
-#              type = "parametric", 
-#              centrally.plotting = TRUE, 
-#              pairwise.display = "s", 
-#              point.path = FALSE,
-#              point.args = aes(size = 0, alpha = 0.2),
-#              results.subtitle = FALSE,
-#              alternative = "greater")
+ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
+              type = "parametric", 
+              centrally.plotting = TRUE, 
+              pairwise.display = "s", 
+              point.path = FALSE,
+              point.args = aes(size = 0, alpha = 0.2),
+              results.subtitle = FALSE,
+              alternative = "greater")
 
+```
+
+## Regression Analysis
+```{r regression, warning=FALSE}
+# First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
+#contrasts(els_viz$RACE)
+# Looks like I set white as the reference earlier.  
+
+mod_race <- lm(MATH ~ 1 + RACE, els_viz)
+summary(mod_race)
+# This just tells us that all groups are significantly different from each other
+# I think we could report pairwise comparisons
+
+race_pairs <- pairwise.t.test(els_viz$MATH, els_viz$RACE, p.adjust.method = "bonf")
+race_pval <- race_pairs$p.value %>%
+  round(digits = 2)
+race_pval
+# Based on this, most groups are significantly different **except** for black/Native, Hispanic/Hispanic (Race specified), Native/Hispanic, Native/Hispanic (Race specified)
 ```
