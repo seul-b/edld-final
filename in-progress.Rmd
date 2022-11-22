@@ -328,12 +328,14 @@ els_viz %>%
   theme(legend.position = "none")+
   labs(x = "Math Score",
        y = "Mother's Education Level")+
-  facet_wrap(~YEAR, nrow = 1)
+  facet_wrap(~BYSEX, nrow = 1)
 
 ```
 
-# ANOVA Results
-## Math scores by Mother Education and Race
+
+# Stats Stuff
+## ANOVA Results
+### Math scores by Mother Education and Race
 
 ```{r ANOVA}
 needs(car)
@@ -341,7 +343,42 @@ math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 Anova(math_mod, type = 3)
 ```
 
-# Descriptive Statistics
+## Student's T test Analysis
+### Difference in scores between year 1-2
+
+```{r t_test}
+needs(stats, ggstatsplot)
+str(els_viz)
+# Paired student's t test to examine if means from year 1 and year 2 are significantly different
+
+# Created a small data set of just years and scores plus student id
+els_byyear <- els_viz %>%
+  group_by(YEAR)%>%
+  filter(!is.na(MATH) | !is.na(YEAR)) %>%
+  select(STU_ID, YEAR, MATH)%>%
+  pivot_wider(names_from = YEAR,
+              values_from = MATH) %>%
+  rename("Follow" = "Follow-up")
+
+# Paired student's t test to examine if the mean from the follow up is significantly greater than the base year mean
+t.test(els_byyear$Follow, els_byyear$Base, paired = TRUE, alternative = "greater")
+
+# Paired student's t test to examine if means from base year and follow up are significantly different.
+t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE)
+
+# Visualization of the means by year. The t test suggests that there is a significant difference in scores by year, despite the means being similar, unfortunately, the mean of the follow up is significantly less than the base year. I was thinking we could focus on visualizing the data by race and mother's education and sex rather than comparing year 1 to year 2 data.
+ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
+              type = "parametric", 
+              centrally.plotting = TRUE, 
+              pairwise.display = "s", 
+              point.path = FALSE,
+              point.args = aes(size = 0, alpha = 0.2),
+              results.subtitle = FALSE,
+              alternative = "greater")
+
+```
+
+## Descriptive Statistics
 
 ```{r descriptive}
 library(knitr)
