@@ -476,7 +476,36 @@ summary(mod_race)
 
 race_pairs <- pairwise.t.test(els_viz$MATH, els_viz$RACE, p.adjust.method = "bonf")
 race_pval <- race_pairs$p.value %>%
-  round(digits = 2)
-race_pval
+  round(digits = 3)
+
+options(knitr.kable.NA = "")
+race_pval %>%
+  kbl(caption = "p -values of Math Score by Race",
+      digits = 3) %>%
+  kable_classic()
+  
 # Based on this, most groups are significantly different **except** for black/Native, Hispanic/Hispanic (Race specified), Native/Hispanic, Native/Hispanic (Race specified)
+
+aovRace <-  aov(MATH ~ RACE,data=els_viz)
+tukey_race <- TukeyHSD(aovRace,conf.level = 0.95)
+tukey_race
+
+# Let's look if Mother's education is a predictor. Did not finish high school is the reference group
+#contrasts(els_viz$MOTHED)
+
+mod_mothed <- lm(MATH ~ 1 + MOTHED, els_viz)
+summary(mod_mothed)
+# This just tells us that groups are significantly different from each other
+# I think we could report pairwise comparisons
+
+mothed_pairs <- pairwise.t.test(els_viz$MATH, els_viz$MOTHED, p.adjust.method = "bonf")
+mothed_pval <- mothed_pairs$p.value %>%
+  round(digits = 3)
+
+options(knitr.kable.NA = "")
+mothed_pval %>%
+  kbl(caption = "p -values of Math Score by Mother's Education level",
+      digits = 3) %>%
+  kable_classic()
+
 ```
