@@ -23,7 +23,7 @@ library(ggstatsplot)
 
 # Research Question
 **Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
-
+#This is an interesting topic!
 # Data Information
 ## Variables
 ### Independent Variables: 
@@ -203,6 +203,8 @@ vis2DataAlternate <- els_longer %>%
 vis2DataAlternate
 ```
 
+## This is nice work guys! I am able to follow how you cleaned the data clearly. I like how you provided an option for visualization. Kudos!
+
 # Visualization 3
 
 ## Distribution plots
@@ -342,6 +344,8 @@ els_viz %>%
   theme(legend.position = "none")+
   facet_wrap(~BYSEX)
 
+#I like your density plots!
+
 # Denisty plot of math scores by Mother education
 els_viz %>%
   filter(!is.na(MATH) & !is.na(MOTHED)) %>%
@@ -367,6 +371,8 @@ els_viz %>%
 
 ```
 
+#I like this idea of alternative ways of visualization! 
+
 # Descriptive Statistics
 
 ```{r descriptive, message=FALSE}
@@ -381,6 +387,10 @@ describeBy(els_longer$MATH, els_longer$BYRACE)
 By_Race %>%
   kbl(caption = "Descriptives by Race", digits = 2) %>%
   kable_classic()
+
+# What if you renamed column 2 (race_n) to "number of people"? 
+
+#also "mother_n"
 
 By_MotherED <- els_longer %>%
   group_by(BYMOTHED) %>%
@@ -512,7 +522,6 @@ mothed_pval %>%
 
 ```
 
-
 ## Mother Education / Race Regression  
 I am not sure how to do a regression analysis of all three variables, but I can look at the regression analysis of math scores based on race/ethnicity and mother's education.   
 
@@ -533,3 +542,4 @@ cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FA
 
 ```
 
+#This is good work guys! You are the best!
