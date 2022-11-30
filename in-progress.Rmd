@@ -298,11 +298,12 @@ els_viz %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_fill_viridis_d(option = 'plasma')+
   theme_minimal()+
-  facet_wrap(~YEAR + BYSEX)+
+  facet_wrap(~BYSEX)+
   labs(x = "", 
        y = "Math Scores",
        title = "Math Score by Race and Year",
-       subtitle = "Separated by sex")
+       subtitle = "Separated by sex")+
+  coord_flip()
 
 # Boxplot of math scores by Mother's education separated by Year
 els_viz %>%
@@ -520,5 +521,36 @@ mothed_pval %>%
   kbl(caption = "p -values of Math Score by Mother's Education level",
       digits = 3) %>%
   kable_classic()
+
+
+```
+
+
+## Mother Education / Race Regression  
+I am not sure how to do a regression analysis of all three variables, but I can look at the regression analysis of math scores based on race/ethnicity and mother's education.   
+
+```{r regression mother edu and race}
+mod_moth_race <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
+summary(mod_moth_race)
+
+```
+
+### Mother Edu / Race Regression Visualization  
+Now let's try to visualize this, it might get messy.  
+
+```{r}
+# Visualization of regression models for mother's education and race
+#install.packages("interactions")
+library(interactions)
+cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FALSE,vary.lty = TRUE)
+
+```
+
+### Mother ED / Race Bar graph
+This allows for the error bars to be included but crowds the data and makes analyzing the data across groups more difficult.
+
+```{r}
+
+cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "bar")
 
 ```
