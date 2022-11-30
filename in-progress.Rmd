@@ -90,10 +90,10 @@ els <- els %>%
 
 #rename
 els <- els %>%
-  mutate(BYSEX = recode(BYSEX, 
+  mutate(BYSEX = dplyr::recode(BYSEX, 
                           `1` = "Male", 
                           `2` = "Female"),
-         BYRACE = recode(BYRACE, 
+         BYRACE = dplyr::recode(BYRACE, 
                           `1` = "Native American/Alaskan", 
                           `2` = "Asian", 
                           `3` = "Black", 
@@ -101,7 +101,7 @@ els <- els %>%
                           `5` = "Hispanic (specified)", 
                           `6` = "More than one race, non-Hispanic", 
                           `7` = "White, non-Hispanic"),
-         BYMOTHED = recode(BYMOTHED,
+         BYMOTHED = dplyr::recode(BYMOTHED,
                           `1` = "Did not finish high school",
                           `2` = "Graduated from high school or GED",
                           `3` = "Attended 2-year school, no degree",
@@ -211,14 +211,14 @@ These are simple distribution plots by Race, Sex, and Mother's education for yea
 ```{r visualization 3, message=FALSE, warning=FALSE}
 # Fixed the names to look better.
 els_viz <- els_longer %>%
-  mutate(RACE = recode(BYRACE, "Native American/Alaskan" = "Native American\n /Alaskan",
+  mutate(RACE = dplyr::recode(BYRACE, "Native American/Alaskan" = "Native American\n /Alaskan",
                          "Asian" = "Asian", 
                          "Black" = "Black", 
                          "Hispanic (no race specified)" = "Hispanic", 
                          "Hispanic (specified)" = "Hispanic\n (Race specified)", 
                          "More than one race, non-Hispanic" = "2+ races\n non-Hispanic",
                          "White, non-Hispanic" = "White\n non-Hispanic"),
-         MOTHED = recode(BYMOTHED, 
+         MOTHED = dplyr::recode(BYMOTHED, 
                            "Did not finish high school" = "Did not finish\n high school",
                            "Graduated from high school or GED" = "Graduated high\n school or GED",
                            "Attended 2-year school, no degree" = "Attended 2-year school\n no degree",
