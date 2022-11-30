@@ -19,6 +19,7 @@ library(kableExtra)
 library(psych)
 library(stats)
 library(ggstatsplot)
+#when installing say no to the prompt 
 ```
 # Introduction
 ### The data set that we chose comes from the IES National Center for Education Statistics. The specific study is titled *Education Longitudinal Study of 2002* or ELS:2002. 
