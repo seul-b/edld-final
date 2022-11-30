@@ -21,6 +21,30 @@ library(stats)
 library(ggstatsplot)
 ```
 
+
+```{r eval=FALSE, include=FALSE}
+#This looks awesome! I love all of the graphs and colors! 
+
+# I did not realize that you could use so many "#" to control size! That is awesome! I will experiment with that! 
+
+# I would consider explaining what might be meaningful about students' change in score. What is it that you are evaluating explicitly? Perhaps ability to improve and grow as a student? 
+
+#I would add a hypothesis that explains what you expect to find with each variable. Are there known components of your variables that lead you to predict that certain students will trend in a specific direction at the second time point?
+#This will mostly come up in the write-up of course! 
+
+# looking at an average of difference scores might be cool! It might allow a graph to have sightly less info and be easier to interpret at a glance
+
+#Excellent use of pivot_longer to create meaningful graphs
+#General organization is also very strong. The table of contents is helpful and it was great to flow through data cleaning, data visualization, and then statistics. 
+
+
+#Thank you for sharing your work! 
+# -Tian 
+
+```
+
+
+
 # Research Question
 **Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
 
@@ -73,6 +97,7 @@ library(ggstatsplot)
 
 els <- read_csv("./data/els_cleaned.csv")
 
+
 #replace missing data code to NA
 els$BYSEX <- na_if(els$BYSEX, -4)
 els$BYSEX <- na_if(els$BYSEX, -8)
@@ -122,6 +147,7 @@ els_longer <- els %>%
     values_to = "MATH"
   )
 
+
 els_wider_by <- els %>% 
   pivot_wider(
     id_cols = !'Follow-up',
@@ -129,12 +155,15 @@ els_wider_by <- els %>%
     values_from = c(Base)
   )
 
+
+
 els_wider_f1 <- els %>% 
   pivot_wider(
     id_cols = !Base,
     names_from = BYRACE,
     values_from = c('Follow-up')
   )
+
 
 ```
 # Visualization 1
@@ -287,7 +316,7 @@ A boxplot of the standardized math scores by Race, Sex, and Mother's education.
 
 ```{r visualization 4, message=FALSE, warning=FALSE}
 # Boxplot of math scores by Race and Sex separated by Year
-els_viz %>%
+p <- els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
   ggplot(aes(x= RACE, y=MATH)) +
   geom_boxplot(aes(fill = RACE), show.legend = FALSE)+
@@ -298,7 +327,10 @@ els_viz %>%
   labs(x = "", 
        y = "Math Scores",
        title = "Math Score by Race and Year",
-       subtitle = "Separated by sex")
+       subtitle = "Separated by sex") 
+
+# These Box plots need a color legend. I tried a few things that are not working. 
+#Here is a website that might be helpful https://www.datanovia.com/en/blog/ggplot-legend-title-position-and-labels/
 
 # Boxplot of math scores by Mother's education separated by Year
 els_viz %>%
