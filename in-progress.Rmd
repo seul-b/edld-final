@@ -15,14 +15,18 @@ library(readr)
 library(tidyr)
 library(ggplot2)
 library(ggridges)
+install.packages("kableExtra")
 library(kableExtra)
 library(psych)
 library(stats)
+install.packages("ggstatsplot")
 library(ggstatsplot)
 ```
 
 # Research Question
-**Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
+**Do the teacher-reported student math scores over two separate time periods (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
+
+## SUGGESTION: Great research question! I reworded it a bit to make it a little easier to read. 
 
 # Data Information
 ## Variables
@@ -55,11 +59,16 @@ library(ggstatsplot)
 #######  -8 = "Survey component legitimate skip/NA"
 #######  -9 = "Missing"
 
+## QUESTION/SUGGESTION: Wow! You have a lot to work with here - super cool! I did notice, however, that the categories under each independent variable seems to be ordered in numerical order starting with 1 and then it tapers off to negative values. Sorry if I'm just missing the answer - is there a reason why -4 indicates "Nonrespondent", -8 indicates "N/A", and -9 indicates "Missing" as opposed to using other numbers for measurement? If not already stated, maybe explaining the rationale for assigning values could be helpful!
+
 ### Dependent Variables: 
 ##### 1. [BYTXMSTD] Math test standardized score 
 ####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2002 10th-graders) as a whole. It provides information on status compared to peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). The standardized T score is a transformation of the IRT theta (ability) estimate, rescaled to a mean of 50 and standard deviation of 10.
 ##### 2. [F1TXMSTD] F1 math test standardized score 
 ####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
+
+
+## STRENGTH: Your team did a great job describing the different dependent variables. Very thorough!
 
 # Data Cleaning 
 
@@ -280,12 +289,18 @@ els_viz %>%
 # Honestly I don't love the visualization, so let's look at a box plot of the data.
 
 # How about a density plot?
+
+## SUGGESTION: This visualization looks so freaking awesome! There is a lot going on at once though, which may make it a little difficult to follow. Maybe it would be helpful to break up the data a little bit or reconfigure a bit so that the labels/titles are little more clear/methodical?
+
 ```
 
 ## Boxplots
 A boxplot of the standardized math scores by Race, Sex, and Mother's education.  
 
 ```{r visualization 4, message=FALSE, warning=FALSE}
+
+## STRENGTH: I'm so impressed with these plots, especially the Math Score by Mother Education one. It's very clear and easy to follow.
+
 # Boxplot of math scores by Race and Sex separated by Year
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
@@ -332,6 +347,9 @@ els_viz %>%
 
 Finally let's examine the data using density plots.
 ```{r visualization 5, message=FALSE, warning=FALSE}
+
+## LEARNED SOMETHING!: These plots are so neatly displayed. Great job! Bonus points for the way that the colors are organized - super satisfying. This is also giving me an idea to display data for my group's project, except instead of race, we're looking at age/generation.
+
 # Density plot of math scores by Race and Sex.
 els_viz %>%
   filter(!is.na(MATH) & !is.na(RACE)) %>%
@@ -466,6 +484,9 @@ ggwithinstats(data = els_viz, x = YEAR, y = MATH,
 
 ## Regression Analysis
 ```{r regression, warning=FALSE}
+
+## STRENGTH: Overall, I think you have a lot of great data here and interesting modes of analysis. It's obvious your group took the time to really plan out how you'll be observing and interpreting your data. Bravo!
+
 # First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
 #contrasts(els_viz$RACE)
 # Looks like I set white as the reference earlier.  
