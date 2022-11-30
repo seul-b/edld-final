@@ -517,7 +517,7 @@ mothed_pval %>%
 I am not sure how to do a regression analysis of all three variables, but I can look at the regression analysis of math scores based on race/ethnicity and mother's education.   
 
 ```{r regression mother edu and race}
-mod_moth_race <- lm(MATH ~ 1 + MOTHERED*RACE, data = els_viz)
+mod_moth_race <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 summary(mod_moth_race)
 
 ```
@@ -533,3 +533,11 @@ cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FA
 
 ```
 
+### Mother ED / Race Bar graph
+This allows for the error bars to be included but crowds the data and makes analyzing the data across groups more difficult.
+
+```{r}
+
+cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "bar")
+
+```
