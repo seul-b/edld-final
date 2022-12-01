@@ -21,6 +21,7 @@ library(stats)
 library(ggstatsplot)
 ```
 
+
 # Research Question
 **Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
 
@@ -138,7 +139,7 @@ els_wider_f1 <- els %>%
 
 ```
 # Visualization 1
-
+<!-- Great plots! I just have one question regarding visualizations 1, 2, and 3: Are these the _mean_ student math scores for each group?  -->
 ```{r visualization 1, message=FALSE, warning=FALSE}
 vis1Data <- els_longer %>% 
   mutate(YEAR = factor(YEAR,
@@ -283,7 +284,10 @@ els_viz %>%
 ```
 
 ## Boxplots
-A boxplot of the standardized math scores by Race, Sex, and Mother's education.  
+A boxplot of the standardized math scores by Race, Sex, and Mother's education. 
+
+<!-- Another question: The title of the box plots says "Math Score by Race and Year, but I'm having a hard time understanding where Year is incorporated in these, especially the first one -->
+
 
 ```{r visualization 4, message=FALSE, warning=FALSE}
 # Boxplot of math scores by Race and Sex separated by Year
@@ -329,7 +333,7 @@ els_viz %>%
 ```
 
 ## Density Plots
-
+<!-- I really enjoy the organization of your density plots. The color scheme makes them a lot more intelligible -->
 Finally let's examine the data using density plots.
 ```{r visualization 5, message=FALSE, warning=FALSE}
 # Density plot of math scores by Race and Sex.
@@ -433,6 +437,9 @@ Anova(math_mod, type = 3)
 ## Student's T test Analysis
 ### Difference in scores between year 1-2
 
+```
+```
+
 ```{r t_test}
 #str(els_viz)
 # Paired student's t test to examine if means from year 1 and year 2 are significantly different
@@ -516,7 +523,8 @@ mothed_pval %>%
 ## Mother Education / Race Regression  
 I am not sure how to do a regression analysis of all three variables, but I can look at the regression analysis of math scores based on race/ethnicity and mother's education.   
 
-```{r regression mother edu and race}
+ <!--What helped me with my regression table was the {stargazer} package, which creates very neat tables and allows you to run multiple regression models side-by-side. -->
+ ```{r regression mother edu and race}
 mod_moth_race <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 summary(mod_moth_race)
 
