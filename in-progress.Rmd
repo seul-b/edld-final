@@ -20,6 +20,14 @@ library(psych)
 library(stats)
 library(ggstatsplot)
 #when installing say no to the prompt 
+library(multcompView)
+# visualizing the Tukeys pairwise comparison
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
+#These three are for the regression table to make it easier to read
+library(interactions)
+#This is for the graph of the interaction plot between race and mother's education
 ```
 # Introduction
 **The data set that we chose comes from the IES National Center for Education Statistics. The specific study is titled *Education Longitudinal Study of 2002* or ELS:2002.**
@@ -479,13 +487,13 @@ ggwithinstats(data = els_viz, x = YEAR, y = MATH,
 ```
 
 ## Regression Analysis
-```{r regression, warning=FALSE}
+```{r regression, warning=FALSE, fig.height=50, fig.width=12}
 # First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
 #contrasts(els_viz$RACE)
 # Looks like I set white as the reference earlier.  
 
 mod_race <- lm(MATH ~ 1 + RACE, els_viz)
-summary(mod_race)
+tab_model(mod_race)
 # This just tells us that all groups are significantly different from each other
 # I think we could report pairwise comparisons
 
@@ -503,13 +511,19 @@ race_pval %>%
 
 aovRace <-  aov(MATH ~ RACE,data=els_viz)
 tukey_race <- TukeyHSD(aovRace,conf.level = 0.95)
-tukey_race
+```
+
+### Visualization of Tukeys Pairwise Comparison
+
+```{r pairwise comparison viz, fig.height= 50, fig.width= 12}
+# Visualization of Tukeys HSD pairwise comparisons by race
+plot(tukey_race, col = "brown")
 
 # Let's look if Mother's education is a predictor. Did not finish high school is the reference group
 #contrasts(els_viz$MOTHED)
 
 mod_mothed <- lm(MATH ~ 1 + MOTHED, els_viz)
-summary(mod_mothed)
+tab_model(mod_mothed)
 # This just tells us that groups are significantly different from each other
 # I think we could report pairwise comparisons
 
@@ -533,11 +547,6 @@ I am not sure how to do a regression analysis of all three variables, but I can 
 ```{r regression mother edu and race, fig.width=20}
 mod_moth_race <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 #summary(mod_moth_race)
-library(needs)
-needs(sjPlot, sjmisc, sjlabelled)
-library(sjPlot)
-library(sjmisc)
-library(sjlabelled)
 
 tab_model(mod_moth_race)
 ```
@@ -548,7 +557,6 @@ Now let's try to visualize this, it might get messy.
 ```{r}
 # Visualization of regression models for mother's education and race
 #install.packages("interactions")
-library(interactions)
 cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FALSE,vary.lty = TRUE)
 
 ```
