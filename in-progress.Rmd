@@ -554,7 +554,7 @@ tab_model(mod_moth_race)
 ### Mother Edu / Race Regression Visualization  
 Now let's try to visualize this, it might get messy.  
 
-```{r}
+```{r, fig.width= 16, fig.height=14}
 # Visualization of regression models for mother's education and race
 #install.packages("interactions")
 cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FALSE,vary.lty = TRUE)
@@ -564,18 +564,10 @@ cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FA
 ### Mother ED / Race Bar graph
 This allows for the error bars to be included but crowds the data and makes analyzing the data across groups more difficult.
 
-```{r}
+```{r, fig.width= 20, fig.height=10}
 
 cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "bar")
 
 ```
 
-## Regression of Race and Math score
 
-```{r regression race}
-
-
-```
-
-
-contrasts(els_viz$RACE)
