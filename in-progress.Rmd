@@ -446,10 +446,16 @@ By_Sex %>%
 ## ANOVA Results
 ### ANOVA Math scores by Mother Education and Race
 
-```{r ANOVA, warning=FALSE, message=FALSE}
+```{r ANOVA, warning=FALSE, message=FALSE, fig.width= 14, fig.height= 80}
+
 library(car)
 math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 Anova(math_mod, type = 3)
+
+# Too many comparisons. Instead we are going to look at one way anova comparisons
+aovRaceMothed <- aov(MATH ~ RACE*MOTHED, data = els_viz)
+tukey_all <- TukeyHSD(aovRaceMothed, conf.level = 0.95)
+
 ```
 
 ### Post Hoc Tukeys HSD Race and Mother's education
@@ -495,7 +501,6 @@ els_byyear <- els_viz %>%
   rename("Follow" = "Follow-up")
 
 # Paired student's t test to examine if the mean from the follow up is significantly greater than the base year mean
-t.test(els_byyear$Follow, els_byyear$Base, paired = TRUE, alternative = "greater")
 
 # Paired student's t test to examine if means from base year and follow up are significantly different.
 t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE)
