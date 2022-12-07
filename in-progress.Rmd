@@ -30,6 +30,8 @@ library(interactions)
 #This is for the graph of the interaction plot between race and mother's education
 ```
 # Correlations Between Student Variables and Math Results Over Time: An Exploratory Study
+## Abstract
+#### In this paper, we utilized data from the IES National Center for Education Statistics to examine the correlations between three student variables and math scores across two timepoints (baseline test and a follow-up two years later). This data set encompassed a large number of variables, of which we chose sex, race, and mother’s education level as our points of interest. Our analyses results in several significant outcomes. We found that there was a significant main effect of sex on math scores. There was also a significant main effect of both race and mother’s education level on math scores. Further, race and mother’s education level had a significant interaction effect on math scores. These results indicate that perhaps there is some difference between ethnic cultures or biases that contribute to the differences in math scores. The results are also consistent with prior literature finding that the level of education mother’s reach is correlated with their children’s academic achievement.  
 
 ## Introduction
 #### The data set that we chose comes from the IES National Center for Education Statistics. The specific study is titled *Education Longitudinal Study of 2002* or ELS:2002.
@@ -203,7 +205,7 @@ vis2Data <- els_longer %>%
   theme_light()
 vis2Data
 
-# Alternate graph combining Visualization 1 & 2? Maybe easier that way?
+# Alternate graph combining Visualization 1 & 2
 
 vis2DataAlternate <- els_longer %>% 
   mutate(YEAR = factor(YEAR,
@@ -225,7 +227,7 @@ vis2DataAlternate <- els_longer %>%
          ) +
     scale_fill_manual(values = c("maroon", "gold")) +
   theme_light()
-vis2DataAlternate
+#vis2DataAlternate
 ```
 
 ### Visualization 3
