@@ -7,6 +7,8 @@ output:
     toc: TRUE
     toc_float: TRUE
     code_folding: hide
+    bibliography: references.bib
+    nocite: '@*'
 ---
 
 ```{r setup, include=FALSE}
@@ -31,7 +33,7 @@ library(interactions)
 ```
 # Correlations Between Student Variables and Math Results Over Time: An Exploratory Study
 ## Abstract
-#### In this paper, we utilized data from the IES National Center for Education Statistics to examine the correlations between three student variables and math scores across two timepoints (baseline test and a follow-up two years later). This data set encompassed a large number of variables, of which we chose sex, race, and mother’s education level as our points of interest. Our analyses results in several significant outcomes. We found that there was a significant main effect of sex on math scores. There was also a significant main effect of both race and mother’s education level on math scores. Further, race and mother’s education level had a significant interaction effect on math scores. These results indicate that perhaps there is some difference between ethnic cultures or biases that contribute to the differences in math scores. The results are also consistent with prior literature finding that the level of education mother’s reach is correlated with their children’s academic achievement.  
+#### In this paper, we utilized data from the IES National Center for Education Statistics to examine the correlations between three student variables and math scores across two timepoints (baseline test and a follow-up two years later; [@bozick_2007]). This data set encompassed a large number of variables, of which we chose sex, race, and mother’s education level as our points of interest. Our analyses results in several significant outcomes. We found that there was a significant main effect of sex on math scores. There was also a significant main effect of both race and mother’s education level on math scores. Further, race and mother’s education level had a significant interaction effect on math scores. These results indicate that perhaps there is some difference between ethnic cultures or biases that contribute to the differences in math scores. The results are also consistent with prior literature finding that the level of education mother’s reach is correlated with their children’s academic achievement.  
 
 ## Introduction
 #### The data set that we chose comes from the IES National Center for Education Statistics. The specific study is titled *Education Longitudinal Study of 2002* or ELS:2002.
@@ -611,5 +613,7 @@ This allows for the error bars to be included but crowds the data and makes anal
 ```{r, fig.width= 20, fig.height=10}
 cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "bar")
 ```
+
+# References
 
 
