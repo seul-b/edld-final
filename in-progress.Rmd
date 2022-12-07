@@ -29,13 +29,16 @@ library(multcompView)
 library(interactions)
 #This is for the graph of the interaction plot between race and mother's education
 ```
-# Introduction
+# Correlations Between Student Variables and Math Results Over Time: An Exploratory Study
+
+## Introduction
 #### The data set that we chose comes from the IES National Center for Education Statistics. The specific study is titled *Education Longitudinal Study of 2002* or ELS:2002.
 #### ELS:2002 represents a major longitudinal effort designed to provide trend data about critical transitions experienced by students as they proceed through high school and into postsecondary education. The 2002 sophomore cohort was followed, initially at 2-year intervals, to collect policy-relevant data about educational processes and outcomes. These data focus on areas of student learning, student tragectories, student persistence and access to college, as well as entry into the workforce.
 #### The baseline year for the study was Spring term 2002. A national sample of high school sophomores were surveyed along with their parents, teachers, adminstrators, and librarians. The first follow-up took place two years later in 2004. Students who remained in the same school for both 2002 and 2004 were resurveyed and tested in multiple areas including mathmatics. Students that did not attend the same school for any reason (i.e. transferred, dropped out, early graduation) were adminstered a questionnaire. Demographic information was collected for both groups along with academic scores.
 
 #### The aim of our project was to  discern the following: **Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
 
+```{r data_information}
 # Data Information
 ## Variables
 ### Independent Variables: 
@@ -72,10 +75,11 @@ library(interactions)
 ####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2002 10th-graders) as a whole. It provides information on status compared to peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). The standardized T score is a transformation of the IRT theta (ability) estimate, rescaled to a mean of 50 and standard deviation of 10.
 ##### 2. [F1TXMSTD] F1 math test standardized score 
 ####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
+```
 
-# Data Cleaning 
 
 ```{r data cleaning, message=FALSE}
+# Data Cleaning 
 #retrieve data
 #els <- read_csv("./data/els_02_12_byf3pststu_v1_0.csv")
 #select columns 
