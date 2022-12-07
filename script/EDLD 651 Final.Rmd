@@ -1,0 +1,663 @@
+---
+title: "EDLD 651 Final"
+author: "Alex Newson, Deanna Strayer, Sabreen NoorAli, Seulbi Lee, Tony Daza"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+bibliography: references.bib
+csl: apa-annotated-bibliography.csl
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+library(ggridges)
+library(kableExtra)
+library(psych)
+library(stats)
+library(ggstatsplot)
+#when installing say no to the prompt 
+#library(multcompView)
+# visualizing the Tukeys pairwise comparison
+#library(sjPlot)
+#library(sjmisc)
+#library(sjlabelled)
+#These three are for the regression table to make it easier to read
+library(interactions)
+#This is for the graph of the interaction plot between race and mother's education
+```
+# Correlations Between Student Demographic Variables and Math Results Over Time: An Exploratory Study
+## Abstract
+|        In this paper, we utilized data from the IES National Center for Education Statistics to examine the correlations between three student demographic variables and math scores across two timepoints (baseline test and a follow-up two years later [@ingels_education_2007]. This data set encompassed a large number of variables, of which we chose sex, race, and mother’s education level as our points of interest. Our analyses results in several significant outcomes. We found that there was a significant main effect of sex on math scores. There was also a significant main effect of both race and mother’s education level on math scores. Further, race and mother’s education level had a significant interaction effect on math scores. These results indicate that perhaps there is some difference between ethnic cultures or biases that contribute to the differences in math scores. The results are also consistent with prior literature finding that the level of education mother’s reach is correlated with their children’s academic achievement.  
+
+## Introduction
+|        The data set that we chose comes from the IES National Center for Education Statistics. The specific study is titled *Education Longitudinal Study of 2002* or ELS:2002 [-@national_center_for_education_statistics_education_nodate]. ELS:2002 represents a major longitudinal effort designed to provide trend data about critical transitions experienced by students as they proceed through high school and into postsecondary education. The 2002 sophomore cohort was followed, initially at 2-year intervals, to collect policy-relevant data about educational processes and outcomes. These data focus on areas of student learning, student tragectories, student persistence and access to college, as well as entry into the workforce.
+|        The baseline year for the study was Spring term 2002. A national sample of high school sophomores were surveyed along with their parents, teachers, adminstrators, and librarians. The first follow-up took place two years later in 2004. Students who remained in the same school for both 2002 and 2004 were resurveyed and tested in multiple areas including mathmatics. Students that did not attend the same school for any reason (i.e. transferred, dropped out, early graduation) were adminstered a questionnaire. Demographic information was collected for both groups along with academic scores.
+|        The aim of our project was to  discern the following: **Do the teacher's reported student math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students?**
+
+## Methods
+|        The National Center for Education Statistics [-@national_center_for_education_statistics_education_nodate] sponsored a longitudinal study to collect data from interviews with 10th grade students in 2002 and three follow-ups in 2004, 2006, and 2012 and their transcripts from high school and postsecondary education in 2005 and 2013. Data used for this project was extracted from the NCES Online Codebook and only included the base year and the first follow-up data [@national_center_for_education_statistics_els_nodate]. Out of approximately 17,600 sophomores who were eligible for the base-year interviews, about 15,400 (87%) students completed a base-year questionnaire in 2002 [@bozick_education_2007]. Around 7,100 of their teachers participated in completing questionnaires, out of the 750 participating schools in the United States [@bozick_education_2007].  For the first follow-up questionnaire, about 15,000 seniors in high school out of 16,500 eligible students (89%) participated in 2004 [@bozick_education_2007]. 
+
+### Procedures
+|        Five variables (i.e., BYSEX, BYRACE, BYMOTHED, BYTXMSTD, F1TXMSTD) out of 4,012 variables included in this longitudinal study were filtered to answer the research question: Does the students’ standardized math scores across the two timepoints (i.e., base year and first follow-up) correlate with 1) students' sex, 2) students' race/ethnicity, and 3) mother's highest education level of students? As independent variables, students’ sex, race, and their mothers’ highest education were filtered. The first dependent variable, BYTXMSTD, is math standardized T scores that were measured in spring 2002 from 10th students. The second dependent variable, F1TXMSTD, is the math standardized T score collected in spring 2004 from 12th students. The standardized T scores in both variables are a transformation of the IRT theta estimate with a mean of 50 and a standard deviation of 10 [@national_center_for_education_statistics_els_nodate]. The raw data were cleaned using the following R functions first: mutate(), select(), filter(), pivot_longer(), and pivot_wider(). Using the cleaned data and the R function of ggplot, a distribution plot, a boxplot, and a density plot were created to visualize the data, gain preliminary information about the distribution, and demonstrate results. The data was subsequently analyzed using two-way analysis of variance (ANOVA) along with post-hoc comparison using tukey’s HSD and a multiple regression analysis of race and mother’s education to answer the research questions. For analyses and visualizations the following R functions [-@r_core_team_r_2020] were used in this project [@patil_visualizations_2021]: dplyr(), ggplot2(), an ggrides(), psych(), readr(), and tidyr()  [@wickham_dplyr_2022; @wickham_readr_2020; @wickham_tidyr_2021; @wickham_ggplot2_2016; @wilke_ggridges_2022; @revelle_psych_2020].
+
+## Results
+|        First, a student’s t-test was conducted to examine if the math scores for the follow up year were significantly different than the math scores from the base year. The paired-student’s t-test resulted in t (13393) = 20.54, p < 0.001 with a mean difference of 0.84 between the base year and follow up year scores. The results suggest that the follow up year had significantly lower math scores than the base year. Additionally, an analysis of variance (ANOVA) revealed a significant main effect of sex on math scores f (1,1) = 108.16, p < .001. Next, a two-way ANOVA was conducted to examine the extent to which math scores depended on mother’s education and race. The main effect for race was significant f (1, 6) = 57.5, p < 0.0001. Additionally, the main effect for mother’s education was significant f (1, 7) = 270.2, p < 0.0001. The interaction between race and mother’s education for math score was significant f (2, 42) = 4.75, p < 0.0001. Due to the significant interaction effect, post-hoc pairwise comparisons were examined for single one-way ANOVA analysis of race and math as well as mother’s education and math using tukey’s HSD method for pairwise comparison. Nearly all of the comparisons for racial group and mother’s education were significant. The only pairings that were not significant were PhD, MD, or other advanced degree compared to master’s degree (p = .151), PhD, MD, or other advanced degree compared to graduated from 4 year college (p = 0.409), or attended college but did not graduate compared to graduated 2 year school (p = 1). For the race groups, only Native American/Alaskan compared to Hispanic (Race specified and unspecified) (p = 1), as Native American compared to black (p = 0.08), and Hispanic race specified compared to Hispanic race unspecified (p = 1). 
+|        A regression analysis was conducted to examine the math score results using race and mother’s education as predictors with the reference group being students whose mothers’ did not graduate from high school for the pairs and the reference for race being white students. Across the board, when race was held constant, student’s whose mother’s had higher levels of education were predicted to score significantly higher in math. Additionally, when mother’s education was held constant, white students were predicted to score significantly higher than black and Hispanic students and significantly lower than Asian students. Examining the pairs, black student scores were predicted to be significantly lower compared to white students at all levels of mother’s education except for the master’s degree level, p = 0.052. The predicted difference between Hispanic student math scores for both race specified and race unspecified did not have as consistent of a pattern, although scores were consistently predicted to be lower than white student scores, the difference was only significant for mother’s education of graduated high school, attend 2-year school, and graduated college for Hispanic race unspecified. The R2 is 0.214 suggesting that 21.4 percent of the change in math scores can be explained by race and mother’s education.  
+
+```{r data_information}
+# Data Information
+## Variables
+### Independent Variables: 
+##### 1.[BYSEX]
+#######  1 = "Male"
+#######  2 = "Female"
+####### -4 = "Nonrespondent"
+####### -8 = "Survey component legitimate skip/NA"
+##### 2. [BYRACE]
+#######  1 = "Amer. Indian/Alaska Native, non-Hispanic"
+#######  2 = "Asian, Hawaii/Pac. Islander,non-Hispanic"
+#######  3 = "Black or African American, non-Hispanic"
+#######  4 = "Hispanic, no race specified"
+#######  5 = "Hispanic, race specified"
+#######  6 = "More than one race, non-Hispanic"
+#######  7 = "White, non-Hispanic"
+#######  -4 = "Nonrespondent"
+#######  -8 = "Survey component legitimate skip/NA"
+##### 3. [BYMOTHED]
+#######  1 = "Did not finish high school"
+#######  2 = "Graduated from high school or GED"
+#######  3 = "Attended 2-year school, no degree"
+#######  4 = "Graduated from 2-year school"
+#######  5 = "Attended college, no 4-year degree"
+#######  6 = "Graduated from college"
+#######  7 = "Completed Master's degree or equivalent"
+#######  8 = "Completed PhD, MD, other advanced degree"
+#######  -4 = "Nonrespondent"
+#######  -8 = "Survey component legitimate skip/NA"
+#######  -9 = "Missing"
+
+### Dependent Variables: 
+##### 1. [BYTXMSTD] Math test standardized score 
+####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2002 10th-graders) as a whole. It provides information on status compared to peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). The standardized T score is a transformation of the IRT theta (ability) estimate, rescaled to a mean of 50 and standard deviation of 10.
+##### 2. [F1TXMSTD] F1 math test standardized score 
+####### Description: Math standardized T Score. The standardized T score provides a norm-referenced measurement of achievement, that is, an estimate of achievement relative to the population (spring 2004 12th-graders) as a whole. It provides information on status compared with peers (as distinguished from the IRT-estimated number-right score which represents status with respect to achievement on a particular criterion set of test items). Although the T score is reported for all F1 in-school responding students (including transfer students), regardless of grade level, the comparison group for standardizing is the 12th grade population. The standardized T score is a transformation of the IRT theta (ability) estimate, and has a mean of 50 and standard deviation of 10 for the weighted subset of 12th-graders in the sample.
+```
+
+```{r data cleaning, message=FALSE}
+# Data Cleaning 
+#retrieve data
+#els <- read_csv("./data/els_02_12_byf3pststu_v1_0.csv")
+#select columns 
+#els <- els %>% dplyr::select(STU_ID, BYSEX, BYRACE, BYMOTHED, BYTXMSTD, F1TXMSTD)
+#save the revised (cleaned) data to csv
+#write.csv(els,"./data/els_cleaned.csv", row.names = FALSE)
+
+els <- read_csv("../data/els_cleaned.csv")
+
+#replace missing data code to NA
+els$BYSEX <- na_if(els$BYSEX, -4)
+els$BYSEX <- na_if(els$BYSEX, -8)
+els$BYRACE <- na_if(els$BYRACE, -4)
+els$BYRACE <- na_if(els$BYRACE, -8)
+els$BYMOTHED <- na_if(els$BYMOTHED, -4)
+els$BYMOTHED <- na_if(els$BYMOTHED, -8)
+els$BYMOTHED <- na_if(els$BYMOTHED, -9)
+els$BYTXMSTD <- na_if(els$BYTXMSTD, -8)
+els$F1TXMSTD <- na_if(els$F1TXMSTD, -8)
+
+#remove if the row doesn't have both BY and F1 math scores
+els <- els %>% 
+  filter(!is.na(BYTXMSTD) | !is.na(F1TXMSTD))
+
+#rename
+els <- els %>%
+  mutate(BYSEX = dplyr::recode(BYSEX, 
+                          `1` = "Male", 
+                          `2` = "Female"),
+         BYRACE = dplyr::recode(BYRACE, 
+                          `1` = "Native American/Alaskan", 
+                          `2` = "Asian", 
+                          `3` = "Black", 
+                          `4` = "Hispanic (no race specified)", 
+                          `5` = "Hispanic (specified)", 
+                          `6` = "More than one race, non-Hispanic", 
+                          `7` = "White, non-Hispanic"),
+         BYMOTHED = dplyr::recode(BYMOTHED,
+                          `1` = "Did not finish high school",
+                          `2` = "Graduated from high school or GED",
+                          `3` = "Attended 2-year school, no degree",
+                          `4` = "Graduated from 2-year school",
+                          `5` = "Attended college, no 4-year degree",
+                          `6` = "Graduated from college",
+                          `7` = "Completed Master's degree or equivalent",
+                          `8` = "Completed PhD, MD, other advanced degree"))
+
+
+#rename columns to use pivot_longer
+colnames(els)[colnames(els) %in% c("BYTXMSTD", "F1TXMSTD")] <- c("Base", "Follow-up")
+
+els_longer <- els %>% 
+  pivot_longer(
+    cols = c('Base', 'Follow-up'),
+    names_to = "YEAR",
+    values_to = "MATH"
+  )
+
+els_wider_by <- els %>% 
+  pivot_wider(
+    id_cols = !'Follow-up',
+    names_from = BYRACE,
+    values_from = c(Base)
+  )
+
+els_wider_f1 <- els %>% 
+  pivot_wider(
+    id_cols = !Base,
+    names_from = BYRACE,
+    values_from = c('Follow-up')
+  )
+
+```
+### Figure 1
+#### Student standardized math scores by year and by sex
+
+```{r visualization 1, message=FALSE, warning=FALSE}
+vis1Data <- els_longer %>% 
+  mutate(YEAR = factor(YEAR,
+                       levels = c("Follow-up",
+                                 "Base"))) %>%
+  filter(!is.na(BYSEX)) %>%
+  ggplot(aes(x=MATH,y=YEAR,fill=YEAR)) +
+    geom_col(position="dodge", show.legend = FALSE) +
+    facet_wrap(~ BYSEX,ncol=1) +
+    labs(x="Math Scores",
+         y="Year",
+         title="Student Math Scores",
+         subtitle="by year and sex"
+         ) +
+    scale_fill_manual(values = c("maroon", "gold")) +
+  theme_light()
+vis1Data
+```
+
+### Figure 2
+#### Student standardized math scores by year and by race
+
+```{r visualization 2, message=FALSE, warning=FALSE}
+vis2Data <- els_longer %>% 
+  mutate(YEAR = factor(YEAR,
+                       levels = c("Follow-up",
+                                  "Base"))) %>%
+  filter(!is.na(BYRACE)) %>%
+  ggplot(aes(x=MATH,y=YEAR,fill=YEAR)) +
+    geom_col(position="dodge", show.legend = FALSE) +
+    facet_wrap(~ BYRACE,ncol=1) +
+    labs(x="Math Scores",
+         y="Year",
+         title="Student Math Scores",
+         subtitle="by year and race"
+         ) +
+    scale_fill_manual(values = c("maroon", "gold")) +
+  theme_light()
+vis2Data
+
+# Alternate graph combining Visualization 1 & 2
+
+vis2DataAlternate <- els_longer %>% 
+  mutate(YEAR = factor(YEAR,
+                       levels = c("Follow-up",
+                                  "Base"))) %>%
+  mutate(BYSEX = factor(BYSEX,
+                       levels = c("Male",
+                                  "Female"))) %>%
+  filter(!is.na(BYRACE)) %>%
+  ggplot(aes(x=MATH,y=YEAR,fill=BYSEX)) +
+    geom_col(position="dodge") +
+    facet_wrap(~ BYRACE,ncol=1) +
+    scale_fill_discrete(breaks=c('Male', 'Female')) +
+    labs(x="Math Scores",
+         y="Year",
+         fill = "Sex",
+         title="Student Math Scores",
+         subtitle="by year and race, separated by sex"
+         ) +
+    scale_fill_manual(values = c("maroon", "gold")) +
+  theme_light()
+#vis2DataAlternate
+```
+
+```{r name cleaning, message=FALSE, warning=FALSE}
+
+# Fixed the names to look better.
+els_viz <- els_longer %>%
+  mutate(RACE = dplyr::recode(BYRACE, "Native American/Alaskan" = "Native American\n /Alaskan",
+                         "Asian" = "Asian", 
+                         "Black" = "Black", 
+                         "Hispanic (no race specified)" = "Hispanic", 
+                         "Hispanic (specified)" = "Hispanic\n (Race specified)", 
+                         "More than one race, non-Hispanic" = "2+ races\n non-Hispanic",
+                         "White, non-Hispanic" = "White\n non-Hispanic"),
+         MOTHED = dplyr::recode(BYMOTHED, 
+                           "Did not finish high school" = "Did not finish\n high school",
+                           "Graduated from high school or GED" = "Graduated high\n school or GED",
+                           "Attended 2-year school, no degree" = "Attended 2-year school\n no degree",
+                           "Graduated from 2-year school" = "Graduated 2-year\n school",
+                           "Attended college, no 4-year degree" = "Attended college\n no degree",
+                           "Graduated from college" = "Graduated college",
+                           "Completed Master's degree or equivalent" = "Master's degree",
+                           "Completed PhD, MD, other advanced degree" = "PhD, MD,other\nadvanced degree")) %>%
+  mutate(RACE = factor(RACE, levels = c("White\n non-Hispanic",
+                                        "Black",
+                                        "Hispanic",
+                                        "Hispanic\n (Race specified)",
+                                        "Asian",
+                                        "Native American\n /Alaskan",
+                                        "2+ races\n non-Hispanic")),
+         MOTHED = factor(MOTHED, levels = c("Did not finish\n high school",
+                                            "Graduated high\n school or GED",
+                                            "Attended 2-year school\n no degree",
+                                            "Graduated 2-year\n school",
+                                            "Attended college\n no degree",
+                                            "Graduated college",
+                                            "Master's degree",
+                                            "PhD, MD,other\nadvanced degree")))
+
+```
+
+```{r distribution plots, message=FALSE, warning=FALSE, eval=FALSE}
+## Distribution plots
+#These are simple distribution plots by Race, Sex, and Mother's education for year 1 and year 2 for standardized math scores.
+
+# A plot of the distribution of math scores by race in year 1 and follow up  
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE)) %>%
+  ggplot(aes(x = MATH)) +
+  geom_histogram(col='black',fill='white')+
+  theme_minimal() +
+  xlab("Math Scores") +
+  xlim(10,90)+
+  facet_wrap( ~ RACE + YEAR, nrow = 2, ncol=7)+
+  theme(strip.background =element_rect(fill="white"))
+
+# A plot of the distribution of math scores by sex in year 1 and follow up.
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE) & !is.na(BYSEX)) %>%
+  ggplot(aes(x = MATH)) +
+  geom_histogram(col='black',fill='white')+
+  theme_minimal() +
+  xlab("Math Scores") +
+  xlim(10,90)+
+  facet_wrap( ~ BYSEX + YEAR, nrow = 1, ncol=4)+
+  theme(strip.background =element_rect(fill="white"))
+
+# A Plot of distribution of math scores by mother's education for year 1 and follow up. 
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x = MATH)) +
+  geom_histogram(col='black',fill='white')+
+  theme_minimal() +
+  xlab("Math Scores") +
+  xlim(10,90)+
+  facet_wrap( ~ MOTHED + YEAR, nrow = 2, ncol=8)+
+  theme(strip.background =element_rect(fill="white"))
+
+# Honestly I don't love the visualization, so let's look at a box plot of the data.
+
+# How about a density plot?
+```
+
+```{r visualization 4, message=FALSE, warning=FALSE, eval=FALSE}
+# Boxplot of math scores by Race and Sex separated by Year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE)) %>%
+  ggplot(aes(x= RACE, y=MATH)) +
+  geom_boxplot(aes(fill = RACE), show.legend = FALSE)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_viridis_d(option = 'plasma')+
+  theme_minimal()+
+  facet_wrap(~BYSEX)+
+  labs(x = "", 
+       y = "Math Scores",
+       title = "Math Score by Race and Year",
+       subtitle = "Separated by sex")+
+  coord_flip()
+```
+
+### Figure 3
+#### Boxplot of student standardized math score by mother's education and by year
+
+```{r figure 3, message=FALSE, warning=FALSE}
+# Boxplot of math scores by Mother's education separated by Year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x= MOTHED, y=MATH)) +
+  geom_boxplot(aes(fill = MOTHED), show.legend = FALSE)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  coord_flip()+
+  scale_fill_viridis_d(option = 'mako')+
+  theme_minimal()+
+  facet_wrap(~YEAR)+
+  labs(x = "", 
+       y = "Math Scores",
+       title = "Math Score by Mother Education and Year")
+```
+
+
+```{r visualization 5, message=FALSE, warning=FALSE, eval=FALSE}
+# Boxplot of math scores by sex separated by year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(BYSEX)) %>%
+  ggplot(aes(x= BYSEX, y=MATH)) +
+  geom_boxplot(aes(fill = BYSEX), show.legend = FALSE)+
+  scale_fill_viridis_d()+
+  theme_minimal()+
+  facet_wrap(~YEAR)+
+  labs(x = "", 
+       y = "Math Scores",
+       title = "Math Score by Sex and Year")
+```
+
+```{r visualization 6, message=FALSE, warning=FALSE, eval=FALSE}
+#### Density Plots
+# Density plot of math scores by Race and Sex.
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(RACE)) %>%
+  ggplot(aes(x = MATH, y = RACE))+
+  geom_density_ridges(aes(fill = RACE), alpha=0.5)+
+  scale_fill_viridis_d(option = 'plasma')+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  facet_wrap(~BYSEX)
+
+# Denisty plot of math scores by Mother education
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x = MATH, y = MOTHED))+
+  geom_density_ridges(aes(fill = MOTHED), alpha=0.5)+
+  scale_fill_viridis_d()+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  labs(x = "Math Score",
+       y = "Mother's Education Level")
+
+# Density plot of math scores by mother education separated by year
+els_viz %>%
+  filter(!is.na(MATH) & !is.na(MOTHED)) %>%
+  ggplot(aes(x = MATH, y = MOTHED))+
+  geom_density_ridges(aes(fill = MOTHED), alpha=0.5)+
+  scale_fill_viridis_d()+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  labs(x = "Math Score",
+       y = "Mother's Education Level")+
+  facet_wrap(~BYSEX, nrow = 1)
+
+```
+
+### Descriptive Statistics
+#### Table 1
+Descriptive statistics by race
+```{r table 1, message=FALSE}
+#Created table by Race 
+By_Race <- els_longer %>%
+  group_by(BYRACE) %>%
+  summarize(race_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+           sd_math = sd(MATH, na.rm = TRUE))
+#Use describeBy to get kurtosis and skew 
+# describeBy(els_longer$MATH, els_longer$BYRACE)
+
+
+By_Race %>%
+  kbl(caption = "Math Descriptives by Race", 
+      digits = 2, 
+      col.names = c("Reported Race", "n", "Mean ", "SD")) %>%
+  kable_classic()
+
+
+```
+
+#### Table 2
+Descriptive statistics by mother's education level
+
+```{r table 2, message = FALSE}
+#table for Mothers Education 
+By_MotherED <- els_longer %>%
+  group_by(BYMOTHED) %>%
+  summarize(mothed_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+            sd_math = sd(MATH, na.rm = TRUE))
+
+# describeBy(els_longer$MATH, els_longer$BYMOTHED)
+
+By_MotherED %>%
+  kbl(caption = "Math Descriptives by Mother's Education Level", 
+      digits = 2, 
+      col.names = c("Mother's Education Level", "n", "Mean ", "SD")) %>%
+  kable_classic()
+
+
+```
+
+#### Table 3
+Descriptive statistics by year
+
+```{r table 3, message =FALSE}
+
+#table for year            
+By_Year <- els_longer %>%
+  group_by(YEAR) %>%
+  summarize(year_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+            sd_math = sd(MATH, na.rm = TRUE))
+
+#describeBy(els_longer$MATH, els_longer$YEAR)
+
+By_Year %>%
+  kbl(caption = "Math Descriptives by Year", 
+      digits = 2, 
+      col.names = c("Year", "n", "Mean ", "SD")) %>%
+  kable_classic()
+
+
+```
+
+#### Table 4
+Descriptive statistics by sex
+
+```{r table 4, message=FALSE}
+#Table by sex 
+By_Sex <- els_longer %>%
+  group_by(BYSEX) %>%
+  summarize(sex_n = n(), 
+            mean_math = mean(MATH, na.rm = TRUE), 
+            sd_math = sd(MATH, na.rm = TRUE))
+
+ #describeBy(els_longer$MATH, els_longer$BYSEX)
+
+By_Sex %>%
+  kbl(caption = "Math Descriptives by Sex", 
+      digits = 2, 
+      col.names = c("Reported Sex", "n", "Mean ", "SD")) %>%
+  kable_classic()
+
+
+```
+
+## Discussion
+|        The paper attempted to address the association of students’ math scores with sex, race, and maternal education across two-time frames to fill in the gaps found in the literature. The overall results represent a decrease in overall math scores from 2002 to 2004. Additionally, there was a significant difference in scores by sex. Male and female scores differed across both year time periods. 
+|        The second question looks at the relationship between math scores with ethnicity. The data collected information from seven different races; Asian, Black, Hispanic, Native American, White/Non-Hispanic, Hispanic (not specified), and more than one race. The overall results depict that Asian scored better than the rest of the races, and White scored better than Blacks and Hispanics. This is suggestive of the fact that race highly interferes with students’ scores, verifying that ethnic culture is a contributing factor in the academic performance of students.   
+|        Lastly, we looked at the mother’s education level and its effects on math results. The analysis indicates that in general, the higher educational status of mothers relates to higher academic achievement. The outcomes endorse the phenomenon of home literacy environment and its impact on child academic accomplishment. The literature posits that mothers, as primary caregivers, are the main agents for the promotion of positive academic experiences during children’s early years. Earlier studies showed that young mothers’ educational attainment is associated with quality home environments and with their children’s higher achievement in both reading and math. 
+
+## Appendix
+### Student's T test Analysis
+#### Difference in scores between year 1-2
+
+```{r t_test}
+#str(els_viz)
+# Paired student's t test to examine if means from year 1 and year 2 are significantly different
+
+# Created a small data set of just years and scores plus student id
+els_byyear <- els_viz %>%
+  group_by(YEAR)%>%
+  filter(!is.na(MATH) | !is.na(YEAR)) %>%
+  select(STU_ID, YEAR, MATH)%>%
+  pivot_wider(names_from = YEAR,
+              values_from = MATH) %>%
+  rename("Follow" = "Follow-up")
+
+# Paired student's t test to examine if the mean from the follow up is significantly greater than the base year mean
+
+# Paired student's t test to examine if means from base year and follow up are significantly different.
+
+### t.test(els_byyear$Base, els_byyear$Follow, paired = TRUE) ###
+
+# Visualization of the means by year. The t test suggests that there is a significant difference in scores by year, despite the means being similar, unfortunately, the mean of the follow up is significantly less than the base year. I was thinking we could focus on visualizing the data by race and mother's education and sex rather than comparing year 1 to year 2 data.
+ggwithinstats(data = els_viz, x = YEAR, y = MATH, 
+              type = "parametric", 
+              centrally.plotting = TRUE, 
+              pairwise.display = "s", 
+              point.path = FALSE,
+              point.args = aes(size = 0, alpha = 0.2),
+              results.subtitle = FALSE,
+              alternative = "greater")
+
+```
+
+### ANOVA Results
+#### ANOVA Math Scores by Mother Education and Race
+
+```{r ANOVA, warning=FALSE, message=FALSE, fig.width= 14, fig.height= 80}
+
+library(car)
+
+math_mod <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
+Anova(math_mod, type = 3)
+
+# Too many comparisons. Instead we are going to look at one way anova comparisons
+aovRaceMothed <- aov(MATH ~ RACE*MOTHED, data = els_viz)
+tukey_all <- TukeyHSD(aovRaceMothed, conf.level = 0.95)
+
+```
+
+#### ANOVA Math Scores by Sex
+
+```{r ANOVA_sex, warning=FALSE, message=FALSE, fig.width= 14, fig.height= 80}
+math_modSex <- lm(MATH ~ 1 + BYSEX, data = els_viz)
+Anova(math_modSex, type = 3)
+
+aovSex <- aov(MATH ~ BYSEX, data = els_viz)
+tukey_Sex <- TukeyHSD(aovSex, conf.level = 0.95)
+```
+
+### Post Hoc Tukeys HSD Pairwise Comparison
+#### Tukeys HSD Race Pairs
+
+```{r pairwise comparison viz, fig.height= 50, fig.width= 12}
+aovRace <-  aov(MATH ~ RACE,data=els_viz)
+tukey_race <- TukeyHSD(aovRace,conf.level = 0.95)
+
+# Visualization of Tukeys HSD pairwise comparisons by race
+plot(tukey_race, col = "brown")
+
+# Let's look if Mother's education is a predictor. Did not finish high school is the reference group
+#contrasts(els_viz$MOTHED)
+
+```
+
+#### Tukeys HSD Mother's Education Pairs
+
+```{r, fig.height= 100, fig.width= 12}
+aovMothed <-  aov(MATH ~ MOTHED,data=els_viz)
+tukey_mothed <- TukeyHSD(aovMothed,conf.level = 0.95)
+
+# Visualization of Tukeys HSD pairwise comparisons by race
+plot(tukey_mothed, col = "red")
+
+# Let's look if Mother's education is a predictor. Did not finish high school is the reference group
+#contrasts(els_viz$MOTHED)
+```
+
+### Regression Analysis
+#### Table 5
+Student standardized math scores by race p-values
+
+```{r regression table 5, warning=FALSE}
+# First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
+#contrasts(els_viz$RACE)
+# Looks like I set white as the reference earlier.  
+
+mod_race <- lm(MATH ~ 1 + RACE, els_viz)
+#tab_model(mod_race)
+# This just tells us that all groups are significantly different from each other
+# I think we could report pairwise comparisons
+
+race_pairs <- pairwise.t.test(els_viz$MATH, els_viz$RACE, p.adjust.method = "bonf")
+race_pval <- race_pairs$p.value %>%
+  round(digits = 3)
+
+options(knitr.kable.NA = "")
+race_pval %>%
+  kbl(caption = "p -values of Math Score by Race",
+      digits = 3) %>%
+  kable_classic()
+  
+# Based on this, most groups are significantly different **except** for black/Native, Hispanic/Hispanic (Race specified), Native/Hispanic, Native/Hispanic (Race specified)
+```
+
+#### Table 6
+Student standardized math scores by mother's education level p-values
+
+```{r regression table 6, message=FALSE}
+mod_mothed <- lm(MATH ~ 1 + MOTHED, els_viz)
+#tab_model(mod_mothed)
+# This just tells us that groups are significantly different from each other
+# I think we could report pairwise comparisons
+
+mothed_pairs <- pairwise.t.test(els_viz$MATH, els_viz$MOTHED, p.adjust.method = "bonf")
+mothed_pval <- mothed_pairs$p.value %>%
+  round(digits = 3)
+
+options(knitr.kable.NA = "")
+mothed_pval %>%
+  kbl(caption = "p -values of Math Score by Mother's Education level",
+      digits = 3) %>%
+  kable_classic()
+```
+
+#### Figure 4: Regression Interaction Plot 
+Plot of predicted interaction between mother's education level and race on student's standardized math scores
+
+* Error bars have been removed from this plot for legibility
+
+```{r regression figure 4, fig.width= 16, fig.height=14}
+mod_moth_race <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
+#summary(mod_moth_race)
+
+#tab_model(mod_moth_race)
+
+# Visualization of regression models for mother's education and race
+#install.packages("interactions")
+cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FALSE,vary.lty = TRUE)
+
+```
+
+#### Figure 5: Interaction Plot Bar graph
+Bar graph of predicted student standardized math scores based on on the interaction between mother's education level and race.
+
+* Error bars are included.
+
+```{r, fig.width= 20, fig.height=10}
+cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "bar")
+```
+
+
+## References
+
+
