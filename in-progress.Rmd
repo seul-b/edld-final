@@ -153,7 +153,7 @@ els_wider_f1 <- els %>%
   )
 
 ```
-# Visualization 1
+## Visualization 1
 
 ```{r visualization 1, message=FALSE, warning=FALSE}
 vis1Data <- els_longer %>% 
@@ -174,7 +174,7 @@ vis1Data <- els_longer %>%
 vis1Data
 ```
 
-# Visualization 2
+## Visualization 2
 
 ```{r visualization 2, message=FALSE, warning=FALSE}
 vis2Data <- els_longer %>% 
@@ -219,9 +219,9 @@ vis2DataAlternate <- els_longer %>%
 vis2DataAlternate
 ```
 
-# Visualization 3
+## Visualization 3
 
-## Distribution plots
+### Distribution plots
 These are simple distribution plots by Race, Sex, and Mother's education for year 1 and year 2 for standardized math scores.
 
 ```{r visualization 3, message=FALSE, warning=FALSE}
@@ -298,7 +298,7 @@ els_viz %>%
 # How about a density plot?
 ```
 
-## Boxplots
+### Boxplots
 A boxplot of the standardized math scores by Race, Sex, and Mother's education.  
 
 ```{r visualization 4, message=FALSE, warning=FALSE}
@@ -344,7 +344,7 @@ els_viz %>%
        title = "Math Score by Sex and Year")
 ```
 
-## Density Plots
+### Density Plots
 
 Finally let's examine the data using density plots.
 ```{r visualization 5, message=FALSE, warning=FALSE}
@@ -383,7 +383,7 @@ els_viz %>%
 
 ```
 
-# Descriptive Statistics
+## Descriptive Statistics
 
 ```{r descriptive, message=FALSE}
 #Created table by Race 
@@ -445,9 +445,9 @@ By_Sex %>%
   kable_classic()
 ```
 
-# More Statistics
-## ANOVA Results
-### ANOVA Math scores by Mother Education and Race
+## More Statistics
+### ANOVA Results
+#### ANOVA Math scores by Mother Education and Race
 
 ```{r ANOVA, warning=FALSE, message=FALSE, fig.width= 14, fig.height= 80}
 
@@ -487,7 +487,7 @@ plot(tukey_mothed, col = "red")
 #contrasts(els_viz$MOTHED)
 ```
 
-## Student's T test Analysis
+### Student's T test Analysis
 #### Difference in scores between year 1-2
 
 ```{r t_test}
@@ -520,7 +520,7 @@ ggwithinstats(data = els_viz, x = YEAR, y = MATH,
 
 ```
 
-## Regression Analysis
+### Regression Analysis
 ```{r regression, warning=FALSE, fig.height=50, fig.width=12}
 # First let us look if Race is a predictor. I will set white as the reference group since it is the largest group. 
 #contrasts(els_viz$RACE)
@@ -562,7 +562,7 @@ mothed_pval %>%
 ```
 
 
-### Mother Education / Race Regression  
+#### Mother Education / Race Regression  
 I am not sure how to do a regression analysis of all three variables, but I can look at the regression analysis of math scores based on race/ethnicity and mother's education.   
 
 ```{r regression mother edu and race, fig.width=20}
@@ -572,7 +572,7 @@ mod_moth_race <- lm(MATH ~ 1 + MOTHED*RACE, data = els_viz)
 #tab_model(mod_moth_race)
 ```
 
-### Mother Edu / Race Regression Visualization  
+#### Mother Edu / Race Regression Visualization  
 Now let's try to visualize this, it might get messy.  
 
 ```{r, fig.width= 16, fig.height=14}
@@ -582,7 +582,7 @@ cat_plot(mod_moth_race, pred = MOTHED, modx = RACE, geom = "line", interval = FA
 
 ```
 
-### Mother ED / Race Bar graph
+#### Mother ED / Race Bar graph
 This allows for the error bars to be included but crowds the data and makes analyzing the data across groups more difficult.
 
 ```{r, fig.width= 20, fig.height=10}
